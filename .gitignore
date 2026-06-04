@@ -1,0 +1,23 @@
+# Brainstorming visual-companion scratch files
+.superpowers/
+
+# Env / secrets
+.env
+.env.local
+*.local
+
+# Node
+node_modules/
+dist/
+build/
+.vite/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
