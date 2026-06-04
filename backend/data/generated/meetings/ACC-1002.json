@@ -1,0 +1,30 @@
+{
+  "account_id": "ACC-1002",
+  "meetings": [
+    {
+      "id": "MTG-1002-01",
+      "date": "2026-05-07",
+      "type": "Call",
+      "title": "Performance check-in call",
+      "participants": ["CON-2004", "CON-2005"],
+      "summary": "Quarterly check-in on the Bond Fund of America due-diligence track. Patricia Schmidt reiterated the board's fee sensitivity following their last manager search; Lisa Schmidt confirmed scheduling for the finals window.",
+      "decisions": [
+        { "text": "Proceed to due diligence on the $600.5mm Bond Fund of America mandate", "by": "CON-2004" }
+      ],
+      "action_items": [
+        { "text": "Share peer benchmarking data", "owner": "Diane Okafor", "status": "open" },
+        { "text": "Provide sub-$500mm breakpoint fee schedule to Mercer", "owner": "Diane Okafor", "status": "open" }
+      ],
+      "participant_interests": {
+        "CON-2004": ["fee transparency", "downside protection"],
+        "CON-2005": ["scheduling/onboarding readiness"]
+      },
+      "transcript_excerpt": [
+        { "speaker": "Patricia Schmidt", "text": "The board is still sensitive on fees after the last search." },
+        { "speaker": "Diane Okafor", "text": "Understood - I'll get Mercer the breakpoint schedule this week." }
+      ],
+      "source_activity": "ACT-4004",
+      "synthetic": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Brief preview</title>
+<style>body{font:14px system-ui;margin:2rem;max-width:780px}button{margin:.2rem}pre{white-space:pre-wrap;background:#f6f6f6;padding:1rem;border-radius:8px}</style>
+</head><body>
+<h1>Pre-Meeting Brief - preview</h1>
+<div id="accts"></div>
+<pre id="out">Pick an account...</pre>
+<script>
+const API = 'http://localhost:8000/api';
+async function load(){
+  const accts = await (await fetch(`${API}/accounts`)).json();
+  const box = document.getElementById('accts');
+  accts.forEach(a=>{const b=document.createElement('button');b.textContent=`${a.id} (${a.overall_risk})`;b.onclick=()=>show(a.id);box.appendChild(b);});
+}
+async function show(id){
+  const b = await (await fetch(`${API}/accounts/${id}/brief`)).json();
+  document.getElementById('out').textContent = JSON.stringify(b, null, 2);
+}
+load();
+</script>
+</body></html>
