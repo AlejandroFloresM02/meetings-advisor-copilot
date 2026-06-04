@@ -135,6 +135,272 @@ function Avatar({ label, color, size = 36 }) {
   )
 }
 
+function Button({ children, className = '', ...props }) {
+  return (
+    <button className={`button ${className}`.trim()} {...props}>
+      {children}
+    </button>
+  )
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+}
+
+function openGroupMeetingWindow(chat) {
+  const meeting = window.open('', 'calderon-group-meeting', 'width=1120,height=760')
+
+  if (!meeting) {
+    window.alert('Allow pop-ups to open the group meeting window.')
+    return
+  }
+
+  const tiles = Object.values(PEOPLE)
+    .map((person, index) => {
+      const cameraState = index === 2 ? 'Speaking' : 'Camera on'
+
+      return `
+        <article class="camera-tile">
+          <div class="camera-feed" style="--person-color: ${escapeHtml(person.color)};">
+            <div class="camera-glow"></div>
+            <div class="camera-person">${escapeHtml(initials(person.name))}</div>
+            <div class="camera-bars" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="camera-meta">
+            <span class="camera-name">${escapeHtml(person.name)}</span>
+            <span class="camera-title">${escapeHtml(person.title)}</span>
+            <span class="camera-state">${cameraState}</span>
+          </div>
+        </article>
+      `
+    })
+    .join('')
+
+  meeting.document.open()
+  meeting.document.write(`
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>${escapeHtml(chat.name)} Meeting</title>
+        <style>
+          :root {
+            color-scheme: light dark;
+            --bg: #111218;
+            --surface: #1c1e26;
+            --surface-2: #252833;
+            --line: #343845;
+            --text: #f4f5f8;
+            --muted: #a9afbd;
+            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+          }
+
+          * { box-sizing: border-box; }
+
+          html,
+          body {
+            height: 100%;
+            overflow: hidden;
+          }
+
+          body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+          }
+
+          .meeting {
+            height: 100vh;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr) auto;
+            overflow: hidden;
+          }
+
+          .meeting-head,
+          .meeting-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 22px;
+            background: rgba(28, 30, 38, 0.94);
+            border-bottom: 1px solid var(--line);
+          }
+
+          .meeting-controls {
+            justify-content: center;
+            border-top: 1px solid var(--line);
+            border-bottom: 0;
+          }
+
+          h1 {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 0;
+          }
+
+          .meeting-subtitle,
+          .meeting-time,
+          .camera-title {
+            color: var(--muted);
+            font-size: 13px;
+          }
+
+          .meeting-subtitle {
+            display: block;
+            margin-top: 3px;
+          }
+
+          .camera-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-auto-rows: minmax(0, 1fr);
+            gap: 14px;
+            padding: 20px;
+            align-content: center;
+            min-height: 0;
+            overflow: hidden;
+          }
+
+          .camera-tile {
+            min-height: 0;
+            display: grid;
+            grid-template-rows: minmax(0, 1fr) auto;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+          }
+
+          .camera-feed {
+            position: relative;
+            min-height: 0;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background:
+              radial-gradient(circle at 35% 24%, color-mix(in srgb, var(--person-color), white 22%), transparent 0 16%, transparent 28%),
+              linear-gradient(135deg, color-mix(in srgb, var(--person-color), black 20%), #171922 72%);
+          }
+
+          .camera-glow {
+            position: absolute;
+            width: 42%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--person-color), white 12%);
+            filter: blur(44px);
+            opacity: 0.46;
+          }
+
+          .camera-person {
+            position: relative;
+            z-index: 1;
+            width: 86px;
+            height: 86px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--person-color), black 8%);
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+          }
+
+          .camera-bars {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            display: flex;
+            align-items: end;
+            gap: 3px;
+            height: 18px;
+          }
+
+          .camera-bars span {
+            width: 4px;
+            border-radius: 999px;
+            background: #9df0c4;
+          }
+
+          .camera-bars span:nth-child(1) { height: 8px; }
+          .camera-bars span:nth-child(2) { height: 15px; }
+          .camera-bars span:nth-child(3) { height: 11px; }
+
+          .camera-meta {
+            display: grid;
+            gap: 2px;
+            padding: 12px 14px;
+            background: var(--surface-2);
+          }
+
+          .camera-name {
+            font-size: 14px;
+            font-weight: 700;
+          }
+
+          .camera-title,
+          .camera-state {
+            font-size: 12px;
+          }
+
+          .camera-state {
+            color: #9df0c4;
+          }
+
+          .control {
+            min-width: 44px;
+            height: 40px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface-2);
+            color: var(--text);
+            font: inherit;
+          }
+
+          .control.leave {
+            border-color: #f87171;
+            background: #dc2626;
+            color: #fff;
+          }
+        </style>
+      </head>
+      <body>
+        <main class="meeting">
+          <header class="meeting-head">
+            <div>
+              <h1>${escapeHtml(chat.name)}</h1>
+              <span class="meeting-subtitle">${Object.keys(PEOPLE).length} cameras active</span>
+            </div>
+            <span class="meeting-time">Group meeting</span>
+          </header>
+          <section class="camera-grid" aria-label="Participant cameras">
+            ${tiles}
+          </section>
+          <footer class="meeting-controls" aria-label="Meeting controls">
+            <button class="control" type="button">Mic</button>
+            <button class="control" type="button">Camera</button>
+            <button class="control" type="button">Share</button>
+            <button class="control leave" type="button" onclick="window.close()">Leave</button>
+          </footer>
+        </main>
+      </body>
+    </html>
+  `)
+  meeting.document.close()
+  meeting.focus()
+}
+
 // ---------------------------------------------------------------------------
 // Sidebar (chat list)
 // ---------------------------------------------------------------------------
@@ -281,6 +547,12 @@ function GroupChat({ chat }) {
         <div className="conv-head-text">
           <h1>{chat.name}</h1>
           <span className="members">{chat.members.join(' · ')}</span>
+        </div>
+        <div className="conv-head-actions">
+          <Button className="meeting-button" type="button" onClick={() => openGroupMeetingWindow(chat)}>
+            <span className="meeting-button-icon" aria-hidden="true"></span>
+            Start meeting
+          </Button>
         </div>
       </header>
 
