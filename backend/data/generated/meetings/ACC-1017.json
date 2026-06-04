@@ -1,0 +1,57 @@
+{
+  "account_id": "ACC-1017",
+  "meetings": [
+    {
+      "id": "MTG-1017-01",
+      "date": "2026-02-19",
+      "type": "Conference",
+      "title": "Hosted at Capital Group symposium",
+      "participants": [
+        "CON-2032",
+        "CON-2033",
+        "CON-2034"
+      ],
+      "summary": "The meeting focused on discussing the Stonebridge Health System Operating Fund's current status and potential strategies for improvement. The attendees explored various options, including a potential reallocation of funds to other investment vehicles managed by Capital Group.",
+      "decisions": [
+        {
+          "text": "Stonebridge Health System Operating Fund will be considered for a reallocation of funds to other Capital Group-managed vehicles.",
+          "by": "CON-2033"
+        }
+      ],
+      "action_items": [
+        {
+          "text": "Develop a detailed retention plan for Stonebridge Health System Operating Fund.",
+          "owner": "Lisa Nguyen",
+          "status": "open"
+        },
+        {
+          "text": "Present the retention plan to the Investment Committee at their next meeting.",
+          "owner": "Aisha Lindqvist",
+          "status": "open"
+        }
+      ],
+      "participant_interests": {
+        "CON-2032": [
+          "Investment Strategy",
+          "Funding Reallocation"
+        ],
+        "CON-2033": [
+          "Fund Retention",
+          "Decision Making"
+        ],
+        "CON-2034": [
+          "Gatekeeper Role",
+          "Committee Approval"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "Aisha Lindqvist",
+          "text": "I think we should consider reallocating some of Stonebridge Health System Operating Fund's funds to other Capital Group-managed vehicles. What do you all think?"
+        }
+      ],
+      "source_activity": "ACT-4047",
+      "synthetic": true
+    }
+  ]
+}
