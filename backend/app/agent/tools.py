@@ -1,5 +1,6 @@
 """Grounded tools for the ReAct agent. Configure once with repo + llm, then the
 tools render the same builders as the REST endpoints into chat-ready markdown."""
+
 from __future__ import annotations
 
 import json
@@ -28,8 +29,10 @@ def _resolve_account_id(query: str) -> str | None:
 
 def brief_to_md(b) -> str:
     lines = [f"**{b.account['name']}** - {b.headline}", ""]
-    lines.append(f"_Snapshot:_ {b.account.get('tier')} / {b.account.get('status')} / "
-                 f"${b.account.get('aum_with_cg_mm'):.0f}mm AUM / consultant {b.account.get('consultant')}")
+    lines.append(
+        f"_Snapshot:_ {b.account.get('tier')} / {b.account.get('status')} / "
+        f"${b.account.get('aum_with_cg_mm'):.0f}mm AUM / consultant {b.account.get('consultant')}"
+    )
     lines.append("\n**Risk flags:**")
     for f in b.risk_flags:
         ex = f" - {f.explanation}" if f.explanation else ""
@@ -61,11 +64,16 @@ def get_participant_card(name_or_id: str, account: str) -> str:
     if not contact or not aid:
         return f"No participant '{name_or_id}' found for account '{account}'."
     c = build_participant_card(repo, contact.id, aid, _STATE["llm"], _STATE["now"])
-    rel = (f"last contacted {c.relationship['days_since_contact']}d ago"
-           if c.relationship.get("days_since_contact") is not None else "")
-    return (f"**{c.contact['name']}** - {c.contact['title']} ({c.contact['role']}). {rel}\n"
-            f"{c.meeting_relevance}\nInterests: {', '.join(c.interests) or 'n/a'}\n"
-            f"Talking point: {c.talking_point}")
+    rel = (
+        f"last contacted {c.relationship['days_since_contact']}d ago"
+        if c.relationship.get("days_since_contact") is not None
+        else ""
+    )
+    return (
+        f"**{c.contact['name']}** - {c.contact['title']} ({c.contact['role']}). {rel}\n"
+        f"{c.meeting_relevance}\nInterests: {', '.join(c.interests) or 'n/a'}\n"
+        f"Talking point: {c.talking_point}"
+    )
 
 
 @tool
@@ -114,5 +122,10 @@ def get_current_meeting(account: str) -> str:
     return "Live in-progress meeting conversation:\n" + "\n".join(lines)
 
 
-TOOLS = [get_account_brief, get_participant_card, list_today_meetings,
-         get_meeting_history, get_current_meeting]
+TOOLS = [
+    get_account_brief,
+    get_participant_card,
+    list_today_meetings,
+    get_meeting_history,
+    get_current_meeting,
+]

@@ -1,4 +1,5 @@
 """In-memory repository over the loaded CRM + meeting fixtures."""
+
 from __future__ import annotations
 
 from pathlib import Path

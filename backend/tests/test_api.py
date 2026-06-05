@@ -3,12 +3,14 @@ from fastapi.testclient import TestClient
 
 def _client(monkeypatch):
     # Force the REST builders to use the deterministic StubLLM (no network).
-    from tests.conftest import StubLLM
     import app.api.routes as routes
+    from tests.conftest import StubLLM
+
     monkeypatch.setattr(routes, "_make_llm", lambda: StubLLM({}))
     routes.get_llm.cache_clear()
     routes._brief_cache.clear()
     from app.main import app
+
     return TestClient(app)
 
 
@@ -28,5 +30,7 @@ def test_accounts_and_brief(monkeypatch):
 
 def test_participant(monkeypatch):
     c = _client(monkeypatch)
-    card = c.get("/api/participants/CON-2005/brief", params={"accountId": "ACC-1002"}).json()
+    card = c.get(
+        "/api/participants/CON-2005/brief", params={"accountId": "ACC-1002"}
+    ).json()
     assert card["contact"]["id"] == "CON-2005"

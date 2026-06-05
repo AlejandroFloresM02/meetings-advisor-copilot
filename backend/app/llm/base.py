@@ -1,4 +1,5 @@
 """Shared LLM interface used by generation + the agent's tools."""
+
 from __future__ import annotations
 
 import json

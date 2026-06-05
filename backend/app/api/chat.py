@@ -6,6 +6,7 @@ agent prompt so answers are grounded in the live conversation *and* the agent's
 CRM tools (account brief, participant card, meeting history). This makes
 `/api/chat` a drop-in superset of `OpenRouter_Agent/server.py`.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -69,14 +70,13 @@ def chat(req: ChatRequest):
     if not req.message.strip():
         raise HTTPException(status_code=400, detail="message must not be empty")
     content = (
-        _grounded_message(req.message, req.context)
-        if req.context
-        else req.message
+        _grounded_message(req.message, req.context) if req.context else req.message
     )
     try:
         result = _get_agent().invoke(
             {"messages": [HumanMessage(content=content)]},
-            config={"configurable": {"thread_id": req.thread_id}})
+            config={"configurable": {"thread_id": req.thread_id}},
+        )
         return {"reply": result["messages"][-1].content}
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(status_code=500, detail=str(exc)) from exc

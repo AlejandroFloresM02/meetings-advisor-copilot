@@ -1,8 +1,8 @@
 """Pydantic v2 models: CRM entities, meeting records, and API outputs."""
+
 from __future__ import annotations
 
-from datetime import date as Date
-from typing import Optional
+import datetime
 
 from pydantic import BaseModel, Field
 
@@ -11,62 +11,62 @@ class Account(BaseModel):
     id: str
     name: str
     type: str
-    region: Optional[str] = None
-    country_state: Optional[str] = None
+    region: str | None = None
+    country_state: str | None = None
     aum_with_cg_mm: float = 0.0
-    tier: Optional[str] = None
-    client_since: Optional[int] = None
-    primary_strategy: Optional[str] = None
-    relationship_manager: Optional[str] = None
-    consultant: Optional[str] = None
-    status: Optional[str] = None
+    tier: str | None = None
+    client_since: int | None = None
+    primary_strategy: str | None = None
+    relationship_manager: str | None = None
+    consultant: str | None = None
+    status: str | None = None
 
 
 class Contact(BaseModel):
     id: str
     account_id: str
     name: str
-    title: Optional[str] = None
-    role: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    last_contacted: Optional[Date] = None
+    title: str | None = None
+    role: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    last_contacted: datetime.date | None = None
 
 
 class Opportunity(BaseModel):
     id: str
-    account_id: Optional[str] = None
+    account_id: str | None = None
     account_name: str
-    opportunity: Optional[str] = None
-    strategy: Optional[str] = None
+    opportunity: str | None = None
+    strategy: str | None = None
     mandate_size_mm: float = 0.0
-    stage: Optional[str] = None
+    stage: str | None = None
     probability: float = 0.0
-    weighted_mm: Optional[float] = None
-    expected_close: Optional[Date] = None
-    owner: Optional[str] = None
+    weighted_mm: float | None = None
+    expected_close: datetime.date | None = None
+    owner: str | None = None
 
 
 class Activity(BaseModel):
     id: str
-    account_id: Optional[str] = None
+    account_id: str | None = None
     account_name: str
-    date: Optional[Date] = None
-    contact: Optional[str] = None
-    type: Optional[str] = None
-    subject: Optional[str] = None
-    owner: Optional[str] = None
-    next_step: Optional[str] = None
+    date: datetime.date | None = None
+    contact: str | None = None
+    type: str | None = None
+    subject: str | None = None
+    owner: str | None = None
+    next_step: str | None = None
 
 
 class Decision(BaseModel):
     text: str
-    by: Optional[str] = None
+    by: str | None = None
 
 
 class ActionItem(BaseModel):
     text: str
-    owner: Optional[str] = None
+    owner: str | None = None
     status: str = "open"
 
 
@@ -77,8 +77,8 @@ class TranscriptTurn(BaseModel):
 
 class MeetingRecord(BaseModel):
     id: str
-    date: Date
-    type: Optional[str] = None
+    date: datetime.date
+    type: str | None = None
     title: str
     participants: list[str] = Field(default_factory=list)
     summary: str = ""
@@ -86,7 +86,7 @@ class MeetingRecord(BaseModel):
     action_items: list[ActionItem] = Field(default_factory=list)
     participant_interests: dict[str, list[str]] = Field(default_factory=dict)
     transcript_excerpt: list[TranscriptTurn] = Field(default_factory=list)
-    source_activity: Optional[str] = None
+    source_activity: str | None = None
     synthetic: bool = True
 
 
@@ -111,7 +111,7 @@ class RiskFlag(BaseModel):
     severity: str
     score: float
     evidence: str
-    explanation: Optional[str] = None
+    explanation: str | None = None
     sources: list[str] = Field(default_factory=list)
 
 
@@ -126,7 +126,7 @@ class AccountBrief(BaseModel):
     headline: str
     risk_flags: list[RiskFlag] = Field(default_factory=list)
     talking_points: list[TalkingPoint] = Field(default_factory=list)
-    since_last_meeting: Optional[dict] = None
+    since_last_meeting: dict | None = None
     suggested_next_steps: list[str] = Field(default_factory=list)
     meta: dict = Field(default_factory=dict)
 

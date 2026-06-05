@@ -1,4 +1,5 @@
 """Central config. Resolves paths and reads env (with safe defaults)."""
+
 from __future__ import annotations
 
 import os
@@ -14,8 +15,12 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(REPO_ROOT / "OpenRouter_Agent" / ".env")
 load_dotenv(BACKEND_ROOT / ".env")
 
-CRM_XLSX_PATH = Path(os.getenv("CRM_XLSX_PATH", REPO_ROOT / "Capital_Group_CRM_mock.xlsx"))
-MEETINGS_DIR = Path(os.getenv("MEETINGS_DIR", BACKEND_ROOT / "data" / "generated" / "meetings"))
+CRM_XLSX_PATH = Path(
+    os.getenv("CRM_XLSX_PATH", REPO_ROOT / "Capital_Group_CRM_mock.xlsx")
+)
+MEETINGS_DIR = Path(
+    os.getenv("MEETINGS_DIR", BACKEND_ROOT / "data" / "generated" / "meetings")
+)
 UI_PUBLIC_DIR = REPO_ROOT / "UI" / "public"
 # Live, in-progress meeting conversations shown in the UI (account_id -> file in UI/public).
 LIVE_CONVERSATIONS = {"ACC-1002": "calderon-conversation.json"}
@@ -36,6 +41,12 @@ OLLAMA_MODEL_FALLBACK = "qwen2.5-coder:7b"
 PREWARM = os.getenv("PREWARM", "0") == "1"
 
 RISK_WEIGHTS = {
-    "coverage": 0.18, "recency": 0.14, "status": 0.16, "aum_vs_peers": 0.12,
-    "pipeline": 0.16, "loss": 0.08, "consultant": 0.06, "open_actions": 0.10,
+    "coverage": 0.18,
+    "recency": 0.14,
+    "status": 0.16,
+    "aum_vs_peers": 0.12,
+    "pipeline": 0.16,
+    "loss": 0.08,
+    "consultant": 0.06,
+    "open_actions": 0.10,
 }

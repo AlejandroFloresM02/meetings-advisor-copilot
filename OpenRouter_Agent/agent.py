@@ -100,7 +100,7 @@ def calculator(expression: str) -> str:
     try:
         # No builtins -> a constrained, safe numeric eval.
         result = eval(expression, {"__builtins__": {}}, {})  # noqa: S307
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return f"Error: {exc}"
     return str(result)
 

@@ -6,9 +6,9 @@ left **chat list** and an active **conversation** pane on the right.
 
 It ships with two chats:
 
-| Chat | Kind | Behaviour |
-| --- | --- | --- |
-| **Sage Agent** | Live | A 1:1 advisor chat wired to the FastAPI backend. |
+| Chat                                   | Kind   | Behaviour                                                   |
+| -------------------------------------- | ------ | ----------------------------------------------------------- |
+| **Sage Agent**                         | Live   | A 1:1 advisor chat wired to the FastAPI backend.            |
 | **Calderon Teachers' — Deal War Room** | Mockup | A static, simulated 5-person group conversation. Read-only. |
 
 > The group conversation is **synthetic**. It is grounded in the mock
@@ -36,12 +36,12 @@ npm run dev      # start the dev server → http://localhost:3000
 
 ### npm scripts
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Start the Vite dev server with HMR. |
-| `npm run build` | Production build to `dist/`. |
+| Script            | What it does                        |
+| ----------------- | ----------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR. |
+| `npm run build`   | Production build to `dist/`.        |
 | `npm run preview` | Serve the production build locally. |
-| `npm run lint` | Run ESLint over the project. |
+| `npm run lint`    | Run ESLint over the project.        |
 
 ## Ports & backend
 

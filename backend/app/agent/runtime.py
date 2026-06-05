@@ -1,4 +1,5 @@
 """Build the OpenRouter ReAct agent with grounded tools + per-thread memory."""
+
 from __future__ import annotations
 
 from datetime import date
@@ -22,5 +23,9 @@ SYSTEM_PROMPT = (
 def build_agent(repo, llm, now: date):
     agent_tools.configure(repo, llm, now)
     model = build_chat_model()
-    return create_agent(model=model, tools=agent_tools.TOOLS,
-                        system_prompt=SYSTEM_PROMPT, checkpointer=InMemorySaver())
+    return create_agent(
+        model=model,
+        tools=agent_tools.TOOLS,
+        system_prompt=SYSTEM_PROMPT,
+        checkpointer=InMemorySaver(),
+    )

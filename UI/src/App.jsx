@@ -33,7 +33,8 @@ const NAME_COLORS = {
 function colorFor(name) {
   if (NAME_COLORS[name]) return NAME_COLORS[name]
   let hash = 0
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash)
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash)
   return `hsl(${hash % 360}, 45%, 50%)`
 }
 
@@ -76,7 +77,12 @@ function Avatar({ label, color, size = 36 }) {
   return (
     <span
       className="avatar"
-      style={{ background: color, width: size, height: size, fontSize: size * 0.38 }}
+      style={{
+        background: color,
+        width: size,
+        height: size,
+        fontSize: size * 0.38,
+      }}
     >
       {label}
     </span>
@@ -101,10 +107,22 @@ function escapeHtml(value) {
 }
 
 // Camera-tile accent colors for the meeting window (cycled per participant).
-const CAMERA_COLORS = ['#4f6dd4', '#d4794f', '#4fd49b', '#b14fd4', '#d4c24f', '#4fb8d4', '#d44f7a']
+const CAMERA_COLORS = [
+  '#4f6dd4',
+  '#d4794f',
+  '#4fd49b',
+  '#b14fd4',
+  '#d4c24f',
+  '#4fb8d4',
+  '#d44f7a',
+]
 
 function openGroupMeetingWindow(chat, people = []) {
-  const meeting = window.open('', 'calderon-group-meeting', 'width=1120,height=760')
+  const meeting = window.open(
+    '',
+    'calderon-group-meeting',
+    'width=1120,height=760',
+  )
 
   if (!meeting) {
     window.alert('Allow pop-ups to open the group meeting window.')
@@ -394,8 +412,7 @@ function AgentChat() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content:
-        'Hi! I’m Sage, your advisor agent. Ask me anything',
+      content: 'Hi! I’m Sage, your advisor agent. Ask me anything',
     },
   ])
   const [input, setInput] = useState('')
@@ -431,7 +448,10 @@ function AgentChat() {
       const data = await res.json()
       setMessages((m) => [...m, { role: 'assistant', content: data.reply }])
     } catch (err) {
-      setMessages((m) => [...m, { role: 'error', content: `⚠️ ${err.message}` }])
+      setMessages((m) => [
+        ...m,
+        { role: 'error', content: `⚠️ ${err.message}` },
+      ])
     } finally {
       setLoading(false)
     }
@@ -508,7 +528,9 @@ function UserHoverCard({ name, profile, pos, onMouseEnter, onMouseLeave }) {
         <Avatar label={initials(name)} color={colorFor(name)} size={42} />
         <div className="hovercard-id">
           <span className="hovercard-name">{name}</span>
-          {profile.position && <span className="hovercard-position">{profile.position}</span>}
+          {profile.position && (
+            <span className="hovercard-position">{profile.position}</span>
+          )}
         </div>
       </div>
       <dl className="hovercard-rows">
@@ -607,7 +629,10 @@ function BriefingAgent({ conversation, onClose }) {
       const data = await res.json()
       setMessages((m) => [...m, { role: 'assistant', content: data.reply }])
     } catch (err) {
-      setMessages((m) => [...m, { role: 'error', content: `⚠️ ${err.message}` }])
+      setMessages((m) => [
+        ...m,
+        { role: 'error', content: `⚠️ ${err.message}` },
+      ])
     } finally {
       setLoading(false)
     }
@@ -621,7 +646,11 @@ function BriefingAgent({ conversation, onClose }) {
           <strong>Briefing</strong>
           <span>Sage · grounded in this chat</span>
         </div>
-        <button className="briefing-close" onClick={onClose} aria-label="Close briefing">
+        <button
+          className="briefing-close"
+          onClick={onClose}
+          aria-label="Close briefing"
+        >
           ×
         </button>
       </header>
@@ -674,20 +703,28 @@ function BriefPanel({ accountId, accountName, onClose }) {
   const bodyRef = useRef(null)
 
   // Always open at the top so the snapshot + risk flags are seen first.
-  useEffect(() => { bodyRef.current?.scrollTo({ top: 0 }) }, [brief])
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 })
+  }, [brief])
 
+  // State resets via the `key` prop at the render site (remount on account
+  // change), so this effect only fetches — no setState in its body.
   useEffect(() => {
     let cancelled = false
-    setBrief(null)
-    setError(null)
     fetch(`/api/accounts/${accountId}/brief`)
       .then((res) => {
         if (!res.ok) throw new Error(`Could not load brief (${res.status})`)
         return res.json()
       })
-      .then((data) => { if (!cancelled) setBrief(data) })
-      .catch((err) => { if (!cancelled) setError(err.message) })
-    return () => { cancelled = true }
+      .then((data) => {
+        if (!cancelled) setBrief(data)
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [accountId])
 
   const a = brief?.account
@@ -699,16 +736,28 @@ function BriefPanel({ accountId, accountName, onClose }) {
           <strong>Pre-Meeting Brief</strong>
           <span>{accountName}</span>
         </div>
-        <button className="briefing-close" onClick={onClose} aria-label="Close brief">
+        <button
+          className="briefing-close"
+          onClick={onClose}
+          aria-label="Close brief"
+        >
           ×
         </button>
       </header>
 
       <div className="brief-body" ref={bodyRef}>
-        {error && <div className="msg error"><div className="bubble">⚠️ {error}</div></div>}
+        {error && (
+          <div className="msg error">
+            <div className="bubble">⚠️ {error}</div>
+          </div>
+        )}
         {!brief && !error && (
           <div className="brief-loading">
-            <div className="bubble typing"><span></span><span></span><span></span></div>
+            <div className="bubble typing">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
             <p>Generating brief…</p>
           </div>
         )}
@@ -723,19 +772,34 @@ function BriefPanel({ accountId, accountName, onClose }) {
                   {a.status && <span className="brief-tag">{a.status}</span>}
                 </div>
                 <dl className="brief-meta">
-                  <div><dt>RM</dt><dd>{a.relationship_manager || '—'}</dd></div>
-                  <div><dt>Consultant</dt><dd>{a.consultant || '—'}</dd></div>
-                  <div><dt>AUM w/ CG</dt><dd>${(a.aum_with_cg_mm ?? 0).toLocaleString()}mm</dd></div>
-                  <div><dt>Strategy</dt><dd>{a.primary_strategy || '—'}</dd></div>
+                  <div>
+                    <dt>RM</dt>
+                    <dd>{a.relationship_manager || '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>Consultant</dt>
+                    <dd>{a.consultant || '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>AUM w/ CG</dt>
+                    <dd>${(a.aum_with_cg_mm ?? 0).toLocaleString()}mm</dd>
+                  </div>
+                  <div>
+                    <dt>Strategy</dt>
+                    <dd>{a.primary_strategy || '—'}</dd>
+                  </div>
                 </dl>
               </div>
             )}
 
-            {brief.headline && <div className="brief-headline">{brief.headline}</div>}
+            {brief.headline && (
+              <div className="brief-headline">{brief.headline}</div>
+            )}
 
             {brief.meeting?.purpose && (
               <p className="brief-purpose">
-                🎯 {brief.meeting.purpose}{brief.meeting.date ? ` · ${brief.meeting.date}` : ''}
+                🎯 {brief.meeting.purpose}
+                {brief.meeting.date ? ` · ${brief.meeting.date}` : ''}
               </p>
             )}
 
@@ -745,12 +809,21 @@ function BriefPanel({ accountId, accountName, onClose }) {
                 {brief.risk_flags.map((r) => (
                   <div key={r.id} className="brief-risk">
                     <div className="brief-risk-head">
-                      <span className="brief-sev-dot" style={{ background: SEVERITY_COLOR[r.severity] || '#888' }} />
+                      <span
+                        className="brief-sev-dot"
+                        style={{
+                          background: SEVERITY_COLOR[r.severity] || '#888',
+                        }}
+                      />
                       <span className="brief-risk-title">{r.title}</span>
-                      <span className="brief-risk-score">{Math.round((r.score ?? 0) * 100)}</span>
+                      <span className="brief-risk-score">
+                        {Math.round((r.score ?? 0) * 100)}
+                      </span>
                     </div>
                     <div className="brief-risk-evidence">{r.evidence}</div>
-                    {r.explanation && <div className="brief-risk-expl">{r.explanation}</div>}
+                    {r.explanation && (
+                      <div className="brief-risk-expl">{r.explanation}</div>
+                    )}
                   </div>
                 ))}
               </section>
@@ -760,7 +833,9 @@ function BriefPanel({ accountId, accountName, onClose }) {
               <section className="brief-section">
                 <h4>Talking points</h4>
                 <ul className="brief-list">
-                  {brief.talking_points.map((t, i) => <li key={i}>{t.text}</li>)}
+                  {brief.talking_points.map((t, i) => (
+                    <li key={i}>{t.text}</li>
+                  ))}
                 </ul>
               </section>
             )}
@@ -768,10 +843,14 @@ function BriefPanel({ accountId, accountName, onClose }) {
             {brief.since_last_meeting && (
               <section className="brief-section">
                 <h4>Since last meeting · {brief.since_last_meeting.date}</h4>
-                <p className="brief-since">{brief.since_last_meeting.summary}</p>
+                <p className="brief-since">
+                  {brief.since_last_meeting.summary}
+                </p>
                 {brief.since_last_meeting.open_action_items?.length > 0 && (
                   <ul className="brief-list">
-                    {brief.since_last_meeting.open_action_items.map((ai, i) => <li key={i}>{ai.text}</li>)}
+                    {brief.since_last_meeting.open_action_items.map((ai, i) => (
+                      <li key={i}>{ai.text}</li>
+                    ))}
                   </ul>
                 )}
               </section>
@@ -781,13 +860,17 @@ function BriefPanel({ accountId, accountName, onClose }) {
               <section className="brief-section">
                 <h4>Suggested next steps</h4>
                 <ul className="brief-list">
-                  {brief.suggested_next_steps.map((s, i) => <li key={i}>{s}</li>)}
+                  {brief.suggested_next_steps.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
                 </ul>
               </section>
             )}
 
             {brief.meta?.grounded_in && (
-              <p className="brief-grounded">Grounded in {brief.meta.grounded_in.join(' · ')}</p>
+              <p className="brief-grounded">
+                Grounded in {brief.meta.grounded_in.join(' · ')}
+              </p>
             )}
           </>
         )}
@@ -810,7 +893,8 @@ function GroupChat({ chat }) {
     let cancelled = false
     fetch(GROUP_CONVERSATION_URL)
       .then((res) => {
-        if (!res.ok) throw new Error(`Could not load conversation (${res.status})`)
+        if (!res.ok)
+          throw new Error(`Could not load conversation (${res.status})`)
         return res.json()
       })
       .then((data) => {
@@ -889,14 +973,20 @@ function GroupChat({ chat }) {
         </div>
         <button
           className={`briefing-btn ${briefOpen ? 'active' : ''}`}
-          onClick={() => { setBriefOpen((v) => !v); setBriefingOpen(false) }}
+          onClick={() => {
+            setBriefOpen((v) => !v)
+            setBriefingOpen(false)
+          }}
         >
           Pre-Meeting Brief
         </button>
         <button
           className={`briefing-btn ${briefingOpen ? 'active' : ''}`}
           style={{ marginLeft: 8 }}
-          onClick={() => { setBriefingOpen((v) => !v); setBriefOpen(false) }}
+          onClick={() => {
+            setBriefingOpen((v) => !v)
+            setBriefOpen(false)
+          }}
         >
           Conversation Briefing
         </button>
@@ -909,7 +999,11 @@ function GroupChat({ chat }) {
                 chat,
                 members.map((name, i) => {
                   const p = profileFor(name)
-                  return { name, title: p.position || p.team || '', color: CAMERA_COLORS[i % CAMERA_COLORS.length] }
+                  return {
+                    name,
+                    title: p.position || p.team || '',
+                    color: CAMERA_COLORS[i % CAMERA_COLORS.length],
+                  }
                 }),
               )
             }
@@ -923,12 +1017,23 @@ function GroupChat({ chat }) {
       <div className="conv-body">
         <div className="conv-main">
           <main className="chat group">
-            {error && <div className="msg error"><div className="bubble">⚠️ {error}</div></div>}
+            {error && (
+              <div className="msg error">
+                <div className="bubble">⚠️ {error}</div>
+              </div>
+            )}
             {rows.map((m, i) => (
-              <div key={i} className={`group-row ${m.stacked ? 'stacked' : ''}`}>
+              <div
+                key={i}
+                className={`group-row ${m.stacked ? 'stacked' : ''}`}
+              >
                 <div className="group-avatar-col">
                   {!m.stacked && (
-                    <Avatar label={initials(m.user)} color={colorFor(m.user)} size={34} />
+                    <Avatar
+                      label={initials(m.user)}
+                      color={colorFor(m.user)}
+                      size={34}
+                    />
                   )}
                 </div>
                 <div className="group-msg-col">
@@ -951,7 +1056,11 @@ function GroupChat({ chat }) {
           </main>
 
           <form className="composer" onSubmit={(e) => e.preventDefault()}>
-            <input type="text" placeholder="This is a mockup conversation — read only" disabled />
+            <input
+              type="text"
+              placeholder="This is a mockup conversation — read only"
+              disabled
+            />
             <button type="submit" disabled>
               Send
             </button>
@@ -960,13 +1069,17 @@ function GroupChat({ chat }) {
 
         {briefOpen && (
           <BriefPanel
+            key={chat.accountId}
             accountId={chat.accountId}
             accountName={chat.name}
             onClose={() => setBriefOpen(false)}
           />
         )}
         {briefingOpen && (
-          <BriefingAgent conversation={messages} onClose={() => setBriefingOpen(false)} />
+          <BriefingAgent
+            conversation={messages}
+            onClose={() => setBriefingOpen(false)}
+          />
         )}
       </div>
 

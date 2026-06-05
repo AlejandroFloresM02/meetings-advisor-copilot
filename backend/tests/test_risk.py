@@ -14,7 +14,7 @@ def test_calderon_flags_no_decision_maker_and_prospect(repo):
     keys = {c.key for c in res.components}
     assert {"coverage", "status", "pipeline", "consultant"} <= keys
     coverage = next(c for c in res.components if c.key == "coverage")
-    assert coverage.severity == "high"        # no Decision Maker mapped
+    assert coverage.severity == "high"  # no Decision Maker mapped
     assert "Decision Maker" in coverage.evidence
     assert 0.0 <= res.overall <= 1.0
 

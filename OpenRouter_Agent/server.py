@@ -103,15 +103,13 @@ def chat(req: ChatRequest) -> ChatResponse:
     # When the UI sends conversation context (the Briefing panel), ground the
     # answer in that transcript; otherwise answer the message as-is.
     content = (
-        _grounded_message(req.message, req.context)
-        if req.context
-        else req.message
+        _grounded_message(req.message, req.context) if req.context else req.message
     )
     try:
         result = _agent.invoke(
             {"messages": [HumanMessage(content=content)]},
             config={"configurable": {"thread_id": req.thread_id}},
         )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         raise HTTPException(status_code=502, detail=f"agent error: {exc}") from exc
     return ChatResponse(reply=result["messages"][-1].content)

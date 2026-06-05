@@ -11,7 +11,9 @@ def test_unsupported_source_is_dropped():
     ctx = {"600"}
     assert statement_supported("Advance the $600mm mandate", ["OPP-3003"], valid, ctx)
     assert not statement_supported("Advance it", ["OPP-9999"], valid, ctx)  # bad source
-    assert not statement_supported("It is worth $700mm", ["OPP-3003"], valid, ctx)  # bad number
+    assert not statement_supported(
+        "It is worth $700mm", ["OPP-3003"], valid, ctx
+    )  # bad number
 
 
 def test_guard_filters_list():
@@ -22,4 +24,5 @@ def test_guard_filters_list():
         {"text": "$700mm fabricated", "sources": ["OPP-3003"]},
     ]
     kept = guard_statements(stmts, valid, ctx)
-    assert len(kept) == 1 and kept[0]["text"] == "$600mm in DD"
+    assert len(kept) == 1
+    assert kept[0]["text"] == "$600mm in DD"
