@@ -15,13 +15,15 @@ def _valid_sources(acc, contacts, opps, activities, meetings) -> set[str]:
             | {a.id for a in activities} | {m.id for m in meetings})
 
 
-def _context_numbers(acc, opps, risk) -> set[str]:
-    text = " ".join(
-        [c.evidence for c in risk.components]
-        + [f"{acc.aum_with_cg_mm}"]
-        + [f"{o.mandate_size_mm} {o.probability} {int(o.probability * 100)}" for o in opps]
-    )
-    return extract_numbers(text)
+def _context_numbers(acc, opps, risk, meetings) -> set[str]:
+    parts = [c.evidence for c in risk.components]
+    parts.append(f"{acc.aum_with_cg_mm}")
+    parts += [f"{o.mandate_size_mm} {o.probability} {int(o.probability * 100)}" for o in opps]
+    for m in meetings:  # whitelist numbers that legitimately appear in meeting facts
+        parts.append(m.summary)
+        parts += [d.text for d in m.decisions]
+        parts += [ai.text for ai in m.action_items]
+    return extract_numbers(" ".join(parts))
 
 
 def _derive_meeting(acc, opps, now: date) -> dict:
@@ -68,7 +70,7 @@ def build_account_brief(repo, account_id: str, llm, now: date) -> AccountBrief:
     risk = compute_risk(repo, account_id, now)
 
     valid = _valid_sources(acc, contacts, opps, activities, meetings)
-    ctx_nums = _context_numbers(acc, opps, risk)
+    ctx_nums = _context_numbers(acc, opps, risk, meetings)
 
     facts = {
         "account": acc.model_dump(),
@@ -101,7 +103,10 @@ def build_account_brief(repo, account_id: str, llm, now: date) -> AccountBrief:
         flags.append(RiskFlag(id=c.key, title=c.title, severity=c.severity, score=c.score,
                               evidence=c.evidence, explanation=e, sources=c.sources))
 
-    headline = (raw.get("headline") or "").strip() or (
+    llm_headline = (raw.get("headline") or "").strip()
+    if llm_headline and not statement_supported(llm_headline, [], valid, ctx_nums):
+        llm_headline = ""  # fabricated number in headline -> drop, fall back to template
+    headline = llm_headline or (
         f"{acc.tier or ''} {acc.status or ''} account; top risk: {risk.components[0].title.lower()}.")
     next_steps = [s for s in (raw.get("next_steps") or []) if isinstance(s, str) and s.strip()]
     if not next_steps:

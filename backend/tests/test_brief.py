@@ -28,3 +28,24 @@ def test_brief_falls_back_when_llm_empty(repo):
     brief = build_account_brief(repo, "ACC-1002", StubLLM({}), date(2026, 6, 4))
     assert brief.headline                                  # template fallback
     assert len(brief.talking_points) >= 1
+
+
+def test_brief_guards_headline_for_fabricated_numbers(repo):
+    from tests.conftest import StubLLM
+    # A headline citing a number absent from the grounded context is unsupported
+    # and must be replaced by the deterministic template fallback.
+    bad = build_account_brief(
+        repo, "ACC-1002",
+        StubLLM({"headline": "Account holds $99999mm in fabricated AUM."}),
+        date(2026, 6, 4),
+    )
+    assert "99999" not in bad.headline
+    assert "top risk:" in bad.headline                     # template fallback marker
+
+    # A clean headline (no fabricated numbers) survives the guard verbatim.
+    good = build_account_brief(
+        repo, "ACC-1002",
+        StubLLM({"headline": "Two late-stage mandates in play."}),
+        date(2026, 6, 4),
+    )
+    assert good.headline == "Two late-stage mandates in play."
