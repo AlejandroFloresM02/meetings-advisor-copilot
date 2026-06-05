@@ -99,7 +99,10 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;')
 }
 
-function openGroupMeetingWindow(chat) {
+// Camera-tile accent colors for the meeting window (cycled per participant).
+const CAMERA_COLORS = ['#4f6dd4', '#d4794f', '#4fd49b', '#b14fd4', '#d4c24f', '#4fb8d4', '#d44f7a']
+
+function openGroupMeetingWindow(chat, people = []) {
   const meeting = window.open('', 'calderon-group-meeting', 'width=1120,height=760')
 
   if (!meeting) {
@@ -107,7 +110,7 @@ function openGroupMeetingWindow(chat) {
     return
   }
 
-  const tiles = Object.values(PEOPLE)
+  const tiles = people
     .map((person, index) => {
       const cameraState = index === 2 ? 'Speaking' : 'Camera on'
 
@@ -327,7 +330,7 @@ function openGroupMeetingWindow(chat) {
           <header class="meeting-head">
             <div>
               <h1>${escapeHtml(chat.name)}</h1>
-              <span class="meeting-subtitle">${Object.keys(PEOPLE).length} cameras active</span>
+              <span class="meeting-subtitle">${people.length} cameras active</span>
             </div>
             <span class="meeting-time">Group meeting</span>
           </header>
@@ -752,7 +755,19 @@ function GroupChat({ chat }) {
           Conversation Briefing
         </button>
         <div className="conv-head-actions">
-          <Button className="meeting-button" type="button" onClick={() => openGroupMeetingWindow(chat)}>
+          <Button
+            className="meeting-button"
+            type="button"
+            onClick={() =>
+              openGroupMeetingWindow(
+                chat,
+                members.map((name, i) => {
+                  const p = profileFor(name)
+                  return { name, title: p.position || p.team || '', color: CAMERA_COLORS[i % CAMERA_COLORS.length] }
+                }),
+              )
+            }
+          >
             <span className="meeting-button-icon" aria-hidden="true"></span>
             Start meeting
           </Button>
