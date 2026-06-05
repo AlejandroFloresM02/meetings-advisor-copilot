@@ -16,6 +16,9 @@ load_dotenv(BACKEND_ROOT / ".env")
 
 CRM_XLSX_PATH = Path(os.getenv("CRM_XLSX_PATH", REPO_ROOT / "Capital_Group_CRM_mock.xlsx"))
 MEETINGS_DIR = Path(os.getenv("MEETINGS_DIR", BACKEND_ROOT / "data" / "generated" / "meetings"))
+UI_PUBLIC_DIR = REPO_ROOT / "UI" / "public"
+# Live, in-progress meeting conversations shown in the UI (account_id -> file in UI/public).
+LIVE_CONVERSATIONS = {"ACC-1002": "calderon-conversation.json"}
 
 
 def _now() -> date:

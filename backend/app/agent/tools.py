@@ -2,10 +2,12 @@
 tools render the same builders as the REST endpoints into chat-ready markdown."""
 from __future__ import annotations
 
+import json
 from datetime import date
 
 from langchain_core.tools import tool
 
+from app import config
 from app.generation.brief import build_account_brief
 from app.generation.participant import build_participant_card
 
@@ -86,4 +88,31 @@ def get_meeting_history(account: str) -> str:
     return "\n".join(f"- {m.date} {m.title}: {m.summary}" for m in ms)
 
 
-TOOLS = [get_account_brief, get_participant_card, list_today_meetings, get_meeting_history]
+@tool
+def get_current_meeting(account: str) -> str:
+    """The live, in-progress meeting conversation for an account - what participants are
+    saying right now in the room. Use this for questions about the current/ongoing meeting."""
+    aid = _resolve_account_id(account)
+    if not aid:
+        return f"No account matching '{account}'."
+    fname = config.LIVE_CONVERSATIONS.get(aid)
+    if not fname:
+        return "No live meeting is in progress for this account."
+    try:
+        data = json.loads((config.UI_PUBLIC_DIR / fname).read_text(encoding="utf-8"))
+    except Exception:
+        return "No live meeting conversation is available."
+    msgs = data.get("messages", []) if isinstance(data, dict) else data
+    lines = []
+    for m in msgs:
+        who = m.get("user", "Unknown")
+        pos = m.get("position")
+        speaker = f"{who} ({pos})" if pos else who
+        lines.append(f"{speaker}: {m.get('content', '')}")
+    if not lines:
+        return "The live meeting has no messages yet."
+    return "Live in-progress meeting conversation:\n" + "\n".join(lines)
+
+
+TOOLS = [get_account_brief, get_participant_card, list_today_meetings,
+         get_meeting_history, get_current_meeting]
