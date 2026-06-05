@@ -50,6 +50,7 @@ const CHATS = [
   {
     id: 'group',
     kind: 'group',
+    accountId: 'ACC-1002',
     name: "Calderon Teachers' — Deal War Room",
     subtitle: '5 members',
     avatar: { label: '👥', color: '#4f6dd4' },
@@ -394,7 +395,7 @@ function AgentChat() {
     {
       role: 'assistant',
       content:
-        'Hi! I’m Sage, your advisor agent. Ask me anything — I can also tell the time and do math.',
+        'Hi! I’m Sage, your advisor agent. Ask me anything',
     },
   ])
   const [input, setInput] = useState('')
@@ -658,12 +659,150 @@ function BriefingAgent({ conversation, onClose }) {
   )
 }
 
+// ---------------------------------------------------------------------------
+// Pre-meeting brief panel — renders the structured one-pager from the backend
+// (GET /api/accounts/{id}/brief): snapshot, ranked risk flags, talking points,
+// since-last-meeting and next steps. Deterministic facts; LLM phrasing layered
+// on top when it passes the fact-check guard.
+// ---------------------------------------------------------------------------
+
+const SEVERITY_COLOR = { high: '#e5534b', medium: '#d9a441', low: '#3fa46a' }
+
+function BriefPanel({ accountId, accountName, onClose }) {
+  const [brief, setBrief] = useState(null)
+  const [error, setError] = useState(null)
+  const bodyRef = useRef(null)
+
+  // Always open at the top so the snapshot + risk flags are seen first.
+  useEffect(() => { bodyRef.current?.scrollTo({ top: 0 }) }, [brief])
+
+  useEffect(() => {
+    let cancelled = false
+    setBrief(null)
+    setError(null)
+    fetch(`/api/accounts/${accountId}/brief`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Could not load brief (${res.status})`)
+        return res.json()
+      })
+      .then((data) => { if (!cancelled) setBrief(data) })
+      .catch((err) => { if (!cancelled) setError(err.message) })
+    return () => { cancelled = true }
+  }, [accountId])
+
+  const a = brief?.account
+  return (
+    <aside className="brief-panel">
+      <header className="briefing-head">
+        <Avatar label="📋" color="#4f6dd4" size={30} />
+        <div className="briefing-title">
+          <strong>Pre-Meeting Brief</strong>
+          <span>{accountName}</span>
+        </div>
+        <button className="briefing-close" onClick={onClose} aria-label="Close brief">
+          ×
+        </button>
+      </header>
+
+      <div className="brief-body" ref={bodyRef}>
+        {error && <div className="msg error"><div className="bubble">⚠️ {error}</div></div>}
+        {!brief && !error && (
+          <div className="brief-loading">
+            <div className="bubble typing"><span></span><span></span><span></span></div>
+            <p>Generating brief…</p>
+          </div>
+        )}
+        {brief && (
+          <>
+            {a && (
+              <div className="brief-snapshot">
+                <div className="brief-account-name">{a.name}</div>
+                <div className="brief-tags">
+                  {a.type && <span className="brief-tag">{a.type}</span>}
+                  {a.tier && <span className="brief-tag">{a.tier}</span>}
+                  {a.status && <span className="brief-tag">{a.status}</span>}
+                </div>
+                <dl className="brief-meta">
+                  <div><dt>RM</dt><dd>{a.relationship_manager || '—'}</dd></div>
+                  <div><dt>Consultant</dt><dd>{a.consultant || '—'}</dd></div>
+                  <div><dt>AUM w/ CG</dt><dd>${(a.aum_with_cg_mm ?? 0).toLocaleString()}mm</dd></div>
+                  <div><dt>Strategy</dt><dd>{a.primary_strategy || '—'}</dd></div>
+                </dl>
+              </div>
+            )}
+
+            {brief.headline && <div className="brief-headline">{brief.headline}</div>}
+
+            {brief.meeting?.purpose && (
+              <p className="brief-purpose">
+                🎯 {brief.meeting.purpose}{brief.meeting.date ? ` · ${brief.meeting.date}` : ''}
+              </p>
+            )}
+
+            {brief.risk_flags?.length > 0 && (
+              <section className="brief-section">
+                <h4>Risk flags</h4>
+                {brief.risk_flags.map((r) => (
+                  <div key={r.id} className="brief-risk">
+                    <div className="brief-risk-head">
+                      <span className="brief-sev-dot" style={{ background: SEVERITY_COLOR[r.severity] || '#888' }} />
+                      <span className="brief-risk-title">{r.title}</span>
+                      <span className="brief-risk-score">{Math.round((r.score ?? 0) * 100)}</span>
+                    </div>
+                    <div className="brief-risk-evidence">{r.evidence}</div>
+                    {r.explanation && <div className="brief-risk-expl">{r.explanation}</div>}
+                  </div>
+                ))}
+              </section>
+            )}
+
+            {brief.talking_points?.length > 0 && (
+              <section className="brief-section">
+                <h4>Talking points</h4>
+                <ul className="brief-list">
+                  {brief.talking_points.map((t, i) => <li key={i}>{t.text}</li>)}
+                </ul>
+              </section>
+            )}
+
+            {brief.since_last_meeting && (
+              <section className="brief-section">
+                <h4>Since last meeting · {brief.since_last_meeting.date}</h4>
+                <p className="brief-since">{brief.since_last_meeting.summary}</p>
+                {brief.since_last_meeting.open_action_items?.length > 0 && (
+                  <ul className="brief-list">
+                    {brief.since_last_meeting.open_action_items.map((ai, i) => <li key={i}>{ai.text}</li>)}
+                  </ul>
+                )}
+              </section>
+            )}
+
+            {brief.suggested_next_steps?.length > 0 && (
+              <section className="brief-section">
+                <h4>Suggested next steps</h4>
+                <ul className="brief-list">
+                  {brief.suggested_next_steps.map((s, i) => <li key={i}>{s}</li>)}
+                </ul>
+              </section>
+            )}
+
+            {brief.meta?.grounded_in && (
+              <p className="brief-grounded">Grounded in {brief.meta.grounded_in.join(' · ')}</p>
+            )}
+          </>
+        )}
+      </div>
+    </aside>
+  )
+}
+
 function GroupChat({ chat }) {
   const [messages, setMessages] = useState([])
   const [participants, setParticipants] = useState({})
   const [error, setError] = useState(null)
   const [card, setCard] = useState(null) // { user, x, y, above }
   const [briefingOpen, setBriefingOpen] = useState(false)
+  const [briefOpen, setBriefOpen] = useState(false)
   const hideTimer = useRef(null)
 
   // Load the conversation dynamically from the JSON file on mount.
@@ -749,8 +888,15 @@ function GroupChat({ chat }) {
           <span className="members">{members.join(' · ')}</span>
         </div>
         <button
+          className={`briefing-btn ${briefOpen ? 'active' : ''}`}
+          onClick={() => { setBriefOpen((v) => !v); setBriefingOpen(false) }}
+        >
+          Pre-Meeting Brief
+        </button>
+        <button
           className={`briefing-btn ${briefingOpen ? 'active' : ''}`}
-          onClick={() => setBriefingOpen((v) => !v)}
+          style={{ marginLeft: 8 }}
+          onClick={() => { setBriefingOpen((v) => !v); setBriefOpen(false) }}
         >
           Conversation Briefing
         </button>
@@ -812,6 +958,13 @@ function GroupChat({ chat }) {
           </form>
         </div>
 
+        {briefOpen && (
+          <BriefPanel
+            accountId={chat.accountId}
+            accountName={chat.name}
+            onClose={() => setBriefOpen(false)}
+          />
+        )}
         {briefingOpen && (
           <BriefingAgent conversation={messages} onClose={() => setBriefingOpen(false)} />
         )}
