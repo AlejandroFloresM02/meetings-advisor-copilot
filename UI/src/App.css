@@ -132,6 +132,13 @@
   min-width: 0;
 }
 
+.conv-head-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .conv-head-text h1 {
   font-size: 17px;
   margin: 0;
@@ -197,6 +204,55 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.meeting-button {
+  padding: 0 14px;
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent-border);
+}
+
+.meeting-button-icon {
+  position: relative;
+  width: 16px;
+  height: 11px;
+  border-radius: 3px;
+  background: currentColor;
+}
+
+.meeting-button-icon::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 2px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid currentColor;
 }
 
 .chat {
@@ -569,5 +625,18 @@
 @media (max-width: 720px) {
   .workspace {
     grid-template-columns: 1fr;
+  }
+
+  .conv-head {
+    flex-wrap: wrap;
+  }
+
+  .conv-head-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .meeting-button {
+    width: 100%;
   }
 }
