@@ -1,0 +1,29 @@
+{
+  "account_id": "ACC-1006",
+  "meetings": [
+    {
+      "id": "MTG-1006-01",
+      "date": "2026-02-19",
+      "type": "Meeting",
+      "title": "Board education session",
+      "participants": ["CON-2011", "CON-2012"],
+      "summary": "Board education session covering the existing Capital Group Emerging Markets Debt allocation and the prospective Capital Income Builder mandate. John Fernandez probed income durability; William Caldwell focused on fee governance.",
+      "decisions": [
+        {"text": "Advance the Capital Income Builder mandate to a fee discussion.", "by": "CON-2011"}
+      ],
+      "action_items": [
+        {"text": "Prepare fee proposal for the Capital Income Builder mandate", "owner": "Sofia Marchetti", "status": "open"}
+      ],
+      "participant_interests": {
+        "CON-2011": ["fee governance", "trustee oversight"],
+        "CON-2012": ["income durability", "emerging markets debt positioning"]
+      },
+      "transcript_excerpt": [
+        {"speaker": "William Caldwell", "text": "If the fees work for the board, we're open to the income mandate."},
+        {"speaker": "Sofia Marchetti", "text": "I'll prepare a fee proposal tailored to the Income Builder allocation."}
+      ],
+      "source_activity": "ACT-4016",
+      "synthetic": true
+    }
+  ]
+}

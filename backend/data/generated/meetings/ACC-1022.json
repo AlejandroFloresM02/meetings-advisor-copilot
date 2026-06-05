@@ -1,0 +1,68 @@
+{
+  "account_id": "ACC-1022",
+  "meetings": [
+    {
+      "id": "MTG-1022-01",
+      "date": "2026-02-25",
+      "type": "Portfolio Review",
+      "title": "Annual portfolio review completed",
+      "participants": ["CON-2043"],
+      "summary": "Annual portfolio review with Board Trustee David Mitchell on the US Core Equity allocation, with discussion of the in-flight World Dividend Growers mandate. Mitchell wants Callan's read before progressing.",
+      "decisions": [
+        {"text": "Hold the World Dividend Growers decision pending consultant feedback.", "by": "CON-2043"}
+      ],
+      "action_items": [
+        {"text": "Await consultant (Callan) feedback on the dividend mandate", "owner": "Tom Brennan", "status": "open"}
+      ],
+      "participant_interests": {
+        "CON-2043": ["dividend strategy", "trustee governance"]
+      },
+      "transcript_excerpt": [
+        {"speaker": "David Mitchell", "text": "We'll wait for Callan's view before the board takes a position."},
+        {"speaker": "Tom Brennan", "text": "Understood - I'll coordinate with Callan and report back."}
+      ],
+      "source_activity": "ACT-4059",
+      "synthetic": true
+    },
+    {
+      "id": "MTG-1022-02",
+      "date": "2026-02-17",
+      "type": "Meeting",
+      "title": "On-site portfolio review",
+      "participants": ["CON-2043"],
+      "summary": "On-site portfolio review with David Mitchell. Confirmed positioning of the US Core Equity allocation; relationship healthy with no action required.",
+      "decisions": [],
+      "action_items": [],
+      "participant_interests": {
+        "CON-2043": ["on-site engagement", "US equity positioning"]
+      },
+      "transcript_excerpt": [
+        {"speaker": "David Mitchell", "text": "Good session - the book looks well positioned."},
+        {"speaker": "Tom Brennan", "text": "Thanks for hosting us on-site."}
+      ],
+      "source_activity": "ACT-4060",
+      "synthetic": true
+    },
+    {
+      "id": "MTG-1022-03",
+      "date": "2026-02-03",
+      "type": "Conference",
+      "title": "Met at Annual Institutional Forum",
+      "participants": ["CON-2043"],
+      "summary": "Met David Mitchell at the Annual Institutional Forum. Discussed dividend and fixed income themes; agreed to share peer benchmarking to support the board's evaluation.",
+      "decisions": [],
+      "action_items": [
+        {"text": "Share peer benchmarking data ahead of the board evaluation", "owner": "Tom Brennan", "status": "open"}
+      ],
+      "participant_interests": {
+        "CON-2043": ["peer benchmarking", "income themes"]
+      },
+      "transcript_excerpt": [
+        {"speaker": "David Mitchell", "text": "Peer benchmarking would help the board get comfortable."},
+        {"speaker": "Tom Brennan", "text": "I'll prepare a benchmarking pack for your committee."}
+      ],
+      "source_activity": "ACT-4058",
+      "synthetic": true
+    }
+  ]
+}

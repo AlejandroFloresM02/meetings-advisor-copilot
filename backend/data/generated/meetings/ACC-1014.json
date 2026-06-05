@@ -1,0 +1,120 @@
+{
+  "account_id": "ACC-1014",
+  "meetings": [
+    {
+      "id": "MTG-1014-01",
+      "date": "2026-03-23",
+      "type": "Call",
+      "title": "Fee schedule discussion",
+      "participants": [
+        "CON-2025",
+        "CON-2026",
+        "CON-2027"
+      ],
+      "summary": "The meeting was held to discuss the fee schedule for NEPC's services with Aegis Casualty & Surety Co. The team presented the current fee structure and highlighted its alignment with Aegis' investment objectives. John Kowalski expressed interest in understanding the performance metrics associated with each fee level, while Joseph Delgado emphasized the importance of maintaining competitive pricing while ensuring value for money. Emma Delgado was tasked with gathering additional information to support the final decision.",
+      "decisions": [
+        {
+          "text": "Review and finalize the fee schedule based on Aegis' specific needs and performance metrics.",
+          "by": "CON-2026"
+        }
+      ],
+      "action_items": [
+        {
+          "text": "Gather additional information on NEPC's performance metrics to support the final decision.",
+          "owner": "Emma Delgado",
+          "status": "open"
+        },
+        {
+          "text": "Prepare a final presentation outlining the fee schedule and its alignment with Aegis' investment objectives.",
+          "owner": "Joseph Delgado",
+          "status": "open"
+        }
+      ],
+      "participant_interests": {
+        "CON-2025": [
+          "Fee structure",
+          "Performance metrics"
+        ],
+        "CON-2026": [
+          "Competitive pricing",
+          "Value for money"
+        ],
+        "CON-2027": [
+          "Additional information gathering"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "John Kowalski",
+          "text": "I'm interested in understanding how the fee structure aligns with our investment objectives."
+        },
+        {
+          "speaker": "Joseph Delgado",
+          "text": "Absolutely, we believe our current fee schedule is competitive and offers value for money. We'll provide additional information on performance metrics to support this."
+        }
+      ],
+      "source_activity": "ACT-4037",
+      "synthetic": true
+    },
+    {
+      "id": "MTG-1014-02",
+      "date": "2026-01-15",
+      "type": "Conference",
+      "title": "Met at Annual Institutional Forum",
+      "participants": [
+        "CON-2025",
+        "CON-2026",
+        "CON-2027"
+      ],
+      "summary": "The meeting with John Kowalski, Joseph Delgado, and Emma Delgado from Aegis Casualty & Surety Co. focused on the EuroPacific Growth mandate. The team discussed the potential of the mandate within their investment strategy and reviewed the current market conditions. They agreed to provide feedback to NEPC regarding their interest in moving forward with the mandate.",
+      "decisions": [
+        {
+          "text": "Provide feedback to NEPC regarding the EuroPacific Growth mandate",
+          "by": "CON-2026"
+        }
+      ],
+      "action_items": [
+        {
+          "text": "Prepare a detailed report on market conditions and potential risks associated with the EuroPacific Growth mandate",
+          "owner": "John Kowalski",
+          "status": "open"
+        },
+        {
+          "text": "Schedule a follow-up meeting with NEPC to present the feedback and discuss next steps",
+          "owner": "Emma Delgado",
+          "status": "open"
+        }
+      ],
+      "participant_interests": {
+        "CON-2025": [
+          "Market analysis",
+          "Risk assessment"
+        ],
+        "CON-2026": [
+          "Mandate evaluation",
+          "Feedback preparation"
+        ],
+        "CON-2027": [
+          "Decision-making process",
+          "Follow-up meeting"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "John Kowalski",
+          "text": "I think we can see significant growth potential in the EuroPacific Growth mandate, especially given our current market conditions."
+        },
+        {
+          "speaker": "Joseph Delgado",
+          "text": "Absolutely. I agree that this could be a valuable addition to our portfolio."
+        },
+        {
+          "speaker": "Emma Delgado",
+          "text": "We need to ensure we have all the necessary information before making a decision, though. Let's have John prepare a detailed report on the market analysis and potential risks."
+        }
+      ],
+      "source_activity": "ACT-4039",
+      "synthetic": true
+    }
+  ]
+}

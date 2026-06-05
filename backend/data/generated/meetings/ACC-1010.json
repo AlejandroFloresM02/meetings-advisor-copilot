@@ -1,0 +1,56 @@
+{
+  "account_id": "ACC-1010",
+  "meetings": [
+    {
+      "id": "MTG-1010-01",
+      "date": "2026-01-13",
+      "type": "Meeting",
+      "title": "On-site portfolio review",
+      "participants": [
+        "CON-2017",
+        "CON-2016"
+      ],
+      "summary": "Ashford University Endowment had a successful on-site portfolio review meeting with NEPC. The team discussed the current status of their mandates, including the American Funds Target Date Series and Capital Group Multi-Sector Income. Elizabeth O'Brien provided insights into the university's investment goals and risk tolerance. Ingrid Delgado facilitated the discussion and ensured all relevant parties were present.",
+      "decisions": [
+        {
+          "text": "Continue with due diligence on the American Funds Target Date Series mandate.",
+          "by": "CON-2017"
+        }
+      ],
+      "action_items": [
+        {
+          "text": "Prepare a detailed report on the Capital Group Multi-Sector Income mandate's performance and risks for presentation to the board next week.",
+          "owner": "Ingrid Delgado",
+          "status": "open"
+        },
+        {
+          "text": "Schedule a follow-up meeting with the investment committee to discuss the American Funds Target Date Series mandate after NEPC feedback is received.",
+          "owner": "Elizabeth O'Brien",
+          "status": "open"
+        }
+      ],
+      "participant_interests": {
+        "CON-2016": [
+          "Gatekeeper",
+          "Decision Maker"
+        ],
+        "CON-2017": [
+          "Chief Investment Officer",
+          "Decision Maker"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "Elizabeth O'Brien",
+          "text": "I appreciate the detailed presentation on our current mandates. We need to ensure we are aligned with our investment goals and risk tolerance."
+        },
+        {
+          "speaker": "Ingrid Delgado",
+          "text": "Absolutely, Elizabeth. Let's make sure all feedback from NEPC is thoroughly considered before making any decisions."
+        }
+      ],
+      "source_activity": "ACT-4025",
+      "synthetic": true
+    }
+  ]
+}

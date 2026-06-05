@@ -1,0 +1,26 @@
+{
+  "account_id": "ACC-1018",
+  "meetings": [
+    {
+      "id": "MTG-1018-01",
+      "date": "2026-02-18",
+      "type": "Call",
+      "title": "Fee schedule discussion",
+      "participants": ["CON-2036"],
+      "summary": "Fee schedule discussion with Susan Delgado tied to the Capital Group New Perspective mandate now in finals. Delgado confirmed the proposed fees are acceptable; relationship healthy.",
+      "decisions": [
+        {"text": "Accept the proposed fee schedule and proceed toward the finals presentation.", "by": "CON-2036"}
+      ],
+      "action_items": [],
+      "participant_interests": {
+        "CON-2036": ["fee schedule", "global equity allocation"]
+      },
+      "transcript_excerpt": [
+        {"speaker": "Susan Delgado", "text": "The fee schedule works for us - let's keep moving toward finals."},
+        {"speaker": "Renee Lambert", "text": "Great - we'll be ready for the finals presentation."}
+      ],
+      "source_activity": "ACT-4048",
+      "synthetic": true
+    }
+  ]
+}
