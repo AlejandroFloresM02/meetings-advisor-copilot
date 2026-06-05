@@ -132,6 +132,13 @@
   min-width: 0;
 }
 
+.conv-head-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .conv-head-text h1 {
   font-size: 17px;
   margin: 0;
@@ -158,6 +165,96 @@
   text-overflow: ellipsis;
 }
 
+/* Briefing button in the group header */
+.briefing-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.briefing-btn:hover {
+  background: var(--accent-bg);
+  filter: brightness(1.08);
+}
+
+.briefing-btn.active {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Body row: main conversation + optional briefing side panel */
+.conv-body {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.conv-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.meeting-button {
+  padding: 0 14px;
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent-border);
+}
+
+.meeting-button-icon {
+  position: relative;
+  width: 16px;
+  height: 11px;
+  border-radius: 3px;
+  background: currentColor;
+}
+
+.meeting-button-icon::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 2px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid currentColor;
+}
+
 .chat {
   flex: 1;
   overflow-y: auto;
@@ -165,6 +262,97 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Briefing side panel */
+.briefing {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: var(--side-bg);
+}
+
+.briefing-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.briefing-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.briefing-title strong {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.briefing-title span {
+  font-size: 11.5px;
+  color: var(--text);
+}
+
+.briefing-close {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.briefing-close:hover {
+  background: var(--hover);
+  color: var(--text-h);
+}
+
+.briefing-chat {
+  padding: 16px;
+  gap: 10px;
+}
+
+.briefing-chat .bubble {
+  max-width: 88%;
+  font-size: 14px;
+}
+
+.briefing-composer {
+  padding: 12px 14px;
+}
+
+.briefing-composer input {
+  font-size: 14px;
+}
+
+.briefing-composer button {
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+/* On narrower viewports the briefing floats over the chat instead of
+   squeezing it down to nothing. */
+@media (max-width: 1024px) {
+  .briefing {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(360px, 100%);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+    z-index: 20;
+  }
 }
 
 /* --- Agent chat bubbles (1:1) ------------------------------------------- */
@@ -247,11 +435,89 @@
   font-weight: 600;
   font-size: 14px;
   color: var(--text-h);
+  cursor: pointer;
 }
 
-.group-title {
-  font-size: 11.5px;
+.group-name:hover {
+  text-decoration: underline;
+}
+
+/* --- User hover card ----------------------------------------------------- */
+
+.hovercard {
+  position: fixed;
+  z-index: 50;
+  width: 288px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  padding: 14px 16px;
+  animation: hovercard-in 0.12s ease-out;
+}
+
+@keyframes hovercard-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.hovercard-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hovercard-id {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hovercard-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.hovercard-position {
+  font-size: 12px;
   color: var(--text);
+}
+
+.hovercard-rows {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  margin: 11px 0 0;
+}
+
+.hovercard-rows dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.hovercard-rows dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-h);
+  word-break: break-word;
+}
+
+.hovercard-rows dd a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.hovercard-rows dd a:hover {
+  text-decoration: underline;
 }
 
 .group-time {
@@ -359,5 +625,18 @@
 @media (max-width: 720px) {
   .workspace {
     grid-template-columns: 1fr;
+  }
+
+  .conv-head {
+    flex-wrap: wrap;
+  }
+
+  .conv-head-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .meeting-button {
+    width: 100%;
   }
 }
