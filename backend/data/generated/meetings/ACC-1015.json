@@ -1,0 +1,88 @@
+{
+  "account_id": "ACC-1015",
+  "meetings": [
+    {
+      "id": "MTG-1015-01",
+      "date": "2026-05-19",
+      "type": "Call",
+      "title": "Mandate funding logistics",
+      "participants": [
+        "CON-2028",
+        "CON-2029"
+      ],
+      "summary": "The meeting with Aisha Caldwell, VP of Pension Investments, went well. The primary focus was on discussing the current status and potential next steps for the Crowne Variable Annuity Platform's mandate funding logistics. Anneke O'Brien, the Investment Analyst, provided insights into recent market trends that could impact the platform's performance. Both parties expressed a desire to maintain a healthy relationship and explore further opportunities together.",
+      "decisions": [],
+      "action_items": [],
+      "participant_interests": {
+        "CON-2028": [
+          "relationship maintenance",
+          "potential mandate funding"
+        ],
+        "CON-2029": [
+          "market trends analysis"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "Aisha Caldwell",
+          "text": "I appreciate the detailed update on our current mandate funding status. It's good to know that we're on track for the upcoming quarter."
+        },
+        {
+          "speaker": "Anneke O'Brien",
+          "text": "Yes, Aisha. We've also been looking at some recent market trends that could affect our performance. I believe these insights could be beneficial for us moving forward."
+        }
+      ],
+      "source_activity": "ACT-4040",
+      "synthetic": true
+    },
+    {
+      "id": "MTG-1015-02",
+      "date": "2026-02-11",
+      "type": "Portfolio Review",
+      "title": "Annual portfolio review completed",
+      "participants": [
+        "CON-2028",
+        "CON-2029"
+      ],
+      "summary": "The meeting was held to discuss the annual portfolio review for Crowne Variable Annuity Platform. The primary strategy, EuroPacific Growth (Intl Equity), was reviewed and deemed effective. Aisha Caldwell expressed interest in exploring additional international equity opportunities. Anneke O'Brien shared peer benchmarking data, which indicated that the platform's performance aligns with industry standards.",
+      "decisions": [
+        {
+          "text": "Explore additional international equity opportunities",
+          "by": "CON-2028"
+        }
+      ],
+      "action_items": [
+        {
+          "text": "Prepare a detailed report on potential international equity investments",
+          "owner": "Anneke O'Brien",
+          "status": "open"
+        },
+        {
+          "text": "Schedule a follow-up meeting to discuss the new investment opportunities",
+          "owner": "Aisha Caldwell",
+          "status": "open"
+        }
+      ],
+      "participant_interests": {
+        "CON-2028": [
+          "additional international equity opportunities"
+        ],
+        "CON-2029": [
+          "peer benchmarking data"
+        ]
+      },
+      "transcript_excerpt": [
+        {
+          "speaker": "Aisha Caldwell",
+          "text": "I'm interested in exploring some additional international equity opportunities to diversify our portfolio."
+        },
+        {
+          "speaker": "Anneke O'Brien",
+          "text": "Great suggestion, Aisha. I've already shared the peer benchmarking data with you. Our performance is on par with industry standards."
+        }
+      ],
+      "source_activity": "ACT-4041",
+      "synthetic": true
+    }
+  ]
+}
