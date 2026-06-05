@@ -1,0 +1,6 @@
+# Dev tooling (linting / formatting). Install with:
+#   pip install -r requirements-dev.txt
+# Then activate the git hooks once:
+#   pre-commit install
+ruff==0.15.16
+pre-commit==4.6.0

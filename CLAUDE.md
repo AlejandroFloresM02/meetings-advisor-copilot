@@ -41,7 +41,39 @@ Intended (per README/requirements, once `server.py` and `UI/` are built):
 cd UI; npm install; npm run dev   # Vite dev server, proxies /api/* to :8000
 ```
 
-There is no test suite or linter configured yet.
+## Linting & formatting
+
+Ruff (Python, whole repo) plus eslint + Prettier (the `UI/` React app) are
+enforced at commit time via [pre-commit](https://pre-commit.com). Configs live in
+`ruff.toml`, `.pre-commit-config.yaml`, `UI/.prettierrc.json`, and
+`UI/eslint.config.js`.
+
+One-time setup (PowerShell or bash):
+
+```
+pip install -r requirements-dev.txt   # installs ruff + pre-commit
+pre-commit install                    # wires the git pre-commit hook
+cd UI                                 # eslint + prettier are UI/ devDeps
+npm install
+```
+
+Run manually:
+
+```
+pre-commit run --all-files            # all hooks across the repo
+ruff check . --fix                    # Python lint (auto-fix)
+ruff format .                         # Python format
+npm --prefix UI run lint              # eslint
+npm --prefix UI run format            # prettier --write
+```
+
+- Ruff is **strict** (broad rule selection). `E501` (line length) is delegated to
+  the formatter, and the two intentional `verify=False` files are exempt from the
+  `S501` security rule via per-file-ignores in `ruff.toml`.
+- The eslint/prettier pre-commit hooks call the `UI/` npm scripts, so
+  `npm install` in `UI/` is required for them to run.
+
+The backend has a pytest suite: `cd backend; pytest` (17 tests).
 
 ## LLM access — the corporate TLS workaround (critical, non-obvious)
 

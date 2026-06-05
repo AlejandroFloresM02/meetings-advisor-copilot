@@ -1,0 +1,43 @@
+# Pre-commit hooks for a clean, standardized codebase.
+# Setup:  pip install -r requirements-dev.txt  &&  pre-commit install
+#         (and `npm install` in UI/ so the eslint/prettier hooks can run)
+# Run on everything:  pre-commit run --all-files
+exclude: '^(backend/data/|.*\.xlsx$)'
+
+repos:
+  # ---- Python: ruff lint + format (whole repo) -----------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.16
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  # ---- JS/JSX: eslint + prettier (UI only) ---------------------------------
+  # Local hooks call the UI package scripts via `npm --prefix`, which runs with
+  # cwd=UI so it resolves UI/node_modules and the flat config. No bash; works on
+  # Windows too. Requires `npm install` in UI/.
+  - repo: local
+    hooks:
+      - id: eslint-ui
+        name: eslint (UI)
+        entry: npm --prefix UI run lint
+        language: system
+        files: ^UI/.*\.(js|jsx)$
+        pass_filenames: false
+      - id: prettier-ui
+        name: prettier (UI)
+        entry: npm --prefix UI run format
+        language: system
+        files: ^UI/.*\.(js|jsx|json|css|html|md)$
+        pass_filenames: false
+
+  # ---- General hygiene -----------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
