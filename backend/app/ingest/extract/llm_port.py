@@ -55,3 +55,74 @@ class OpenRouterLlmExtractor:
 
     def extract(self, system: str, user: str) -> dict:
         return self._client.generate_json(system, user)
+
+
+def _json_object(text: str) -> dict:
+    """Parse a single JSON object from model text (robust to fences / stray prose)."""
+    text = text.strip()
+    try:
+        obj = json.loads(text)
+        return obj if isinstance(obj, dict) else {}
+    except json.JSONDecodeError:
+        pass
+    start, end = text.find("{"), text.rfind("}")
+    if start != -1 and end > start:
+        try:
+            obj = json.loads(text[start : end + 1])
+            return obj if isinstance(obj, dict) else {}
+        except json.JSONDecodeError:
+            pass
+    return {}
+
+
+class OllamaLlmExtractor:
+    """Local Ollama extractor (spec §6 live path) — key-free, no cost.
+
+    Speaks Ollama's /api/chat over httpx with ``format=json``, so it needs no
+    langchain stack — only the core ``httpx`` dep. Defaults to the ``OLLAMA_URL``
+    env var or localhost:11434. ``client`` is injectable for offline tests.
+    """
+
+    def __init__(
+        self,
+        model: str = "qwen2.5:14b",
+        base_url: str | None = None,
+        client=None,
+        timeout: float = 180.0,
+    ) -> None:
+        import os
+
+        self.model = model
+        self.base_url = (
+            base_url or os.getenv("OLLAMA_URL", "http://localhost:11434")
+        ).rstrip("/")
+        self._client = client
+        self.timeout = timeout
+
+    def _http(self):
+        if self._client is not None:
+            return self._client
+        import httpx
+
+        return httpx.Client(timeout=self.timeout)
+
+    def extract(self, system: str, user: str) -> dict:
+        resp = self._http().post(
+            f"{self.base_url}/api/chat",
+            json={
+                "model": self.model,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": system
+                        + " Respond with a single valid JSON object and nothing else.",
+                    },
+                    {"role": "user", "content": user},
+                ],
+                "stream": False,
+                "format": "json",
+            },
+        )
+        resp.raise_for_status()
+        content = resp.json().get("message", {}).get("content", "") or ""
+        return _json_object(content)
