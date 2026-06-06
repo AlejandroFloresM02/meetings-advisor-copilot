@@ -23,13 +23,13 @@ repos:
         name: eslint (UI)
         entry: npm --prefix UI run lint
         language: system
-        files: ^UI/.*\.(js|jsx)$
+        files: ^UI/.*\.(js|jsx|ts|tsx)$
         pass_filenames: false
       - id: prettier-ui
         name: prettier (UI)
         entry: npm --prefix UI run format
         language: system
-        files: ^UI/.*\.(js|jsx|json|css|html|md)$
+        files: ^UI/.*\.(js|jsx|ts|tsx|json|css|html|md)$
         pass_filenames: false
 
   # ---- General hygiene -----------------------------------------------------

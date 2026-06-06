@@ -1,98 +1,73 @@
-# Sage Agent — UI
+# React + TypeScript + Vite
 
-A React + Vite front end for an agentic plugin that lives in a conversational /
-meeting environment (Teams / Slack style). The UI is laid out like Teams: a
-left **chat list** and an active **conversation** pane on the right.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-It ships with two chats:
+Currently, two official plugins are available:
 
-| Chat                                   | Kind   | Behaviour                                                   |
-| -------------------------------------- | ------ | ----------------------------------------------------------- |
-| **Sage Agent**                         | Live   | A 1:1 advisor chat wired to the FastAPI backend.            |
-| **Calderon Teachers' — Deal War Room** | Mockup | A static, simulated 5-person group conversation. Read-only. |
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-> The group conversation is **synthetic**. It is grounded in the mock
-> `Capital_Group_CRM_mock.xlsx` dataset (a fictional CRM) — no real client data.
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Tech stack
+## Expanding the ESLint configuration
 
-- **React 19** with hooks
-- **Vite 8** (dev server + build) via `@vitejs/plugin-react`
-- **ESLint 10** (`eslint .`)
-- Plain CSS with light/dark theming through CSS variables — no UI framework
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Prerequisites
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-- **Node.js** 18+ (developed on Node 24) and **npm**
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-## Getting started
-
-```bash
-npm install      # install dependencies (creates node_modules/)
-npm run dev      # start the dev server → http://localhost:3000
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-### npm scripts
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-| Script            | What it does                        |
-| ----------------- | ----------------------------------- |
-| `npm run dev`     | Start the Vite dev server with HMR. |
-| `npm run build`   | Production build to `dist/`.        |
-| `npm run preview` | Serve the production build locally. |
-| `npm run lint`    | Run ESLint over the project.        |
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Ports & backend
-
-- The **UI dev server** runs on **`http://localhost:3000`** (`server.port` in
-  [`vite.config.js`](vite.config.js), with `strictPort: true` so it fails loudly
-  rather than silently moving if 3000 is taken).
-- Requests to **`/api`** are proxied to the **FastAPI backend** on
-  **`http://localhost:8000`**. This avoids CORS in development — the browser
-  only ever talks to the Vite dev server.
-- The backend is **not** part of this folder. Start it separately on port 8000.
-  Without it, the UI still loads, but messages sent in the **Sage Agent** chat
-  will return an error.
-
-## How the chats work
-
-### Sage Agent (live)
-
-- On submit, the typed message is POSTed to `/api/chat` as
-  `{ message, thread_id }`.
-- `thread_id` is a stable per-tab id (`web-<random>`) so the backend can keep
-  conversation memory for the session.
-- The backend's `reply` is appended as an assistant bubble. Network/HTTP errors
-  render as an inline error bubble; a typing indicator shows while awaiting a
-  response.
-
-### Calderon Teachers' — Deal War Room (mockup)
-
-- A hard-coded thread between five teammates from the CRM org chart
-  (Diane Okafor, Gregory Tanaka, Marcus Hale, Sofia Marchetti, Janet Osei).
-- Each speaker has a colored initials avatar, title, and timestamp; consecutive
-  messages from the same person are stacked Teams-style.
-- The composer is intentionally **disabled** — this chat is for display only.
-
-## Project structure
-
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-UI/
-├── index.html            # App entry, mounts #root
-├── vite.config.js        # Dev server port (3000) + /api → :8000 proxy
-├── eslint.config.js      # Lint rules
-└── src/
-    ├── main.jsx          # React root
-    ├── App.jsx           # Workspace shell, Sidebar, AgentChat, GroupChat + mock data
-    ├── App.css           # Layout + chat/bubble styling
-    └── index.css         # CSS variables (light/dark theme), base styles
-```
-
-### Where to edit things
-
-- **Add / change a chat:** the `CHATS` array in [`src/App.jsx`](src/App.jsx).
-- **Edit the group conversation:** the `GROUP_THREAD` / `PEOPLE` constants in
-  [`src/App.jsx`](src/App.jsx).
-- **Theme colors:** the CSS variables in [`src/index.css`](src/index.css)
-  (a `prefers-color-scheme: dark` block overrides for dark mode).
