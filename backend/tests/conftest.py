@@ -1,3 +1,14 @@
-# V2 fixtures (repo / calpers) are added in Task 3 once config + repository exist.
-# Kept intentionally empty during the Task 0 scaffold so pytest collects cleanly
-# with no imports into the removed V1 layers.
+import pytest
+
+from app.config import SNAPSHOTS_DIR
+from app.data.repository import load_repository
+
+
+@pytest.fixture
+def repo():
+    return load_repository(SNAPSHOTS_DIR)
+
+
+@pytest.fixture
+def calpers(repo):
+    return repo.get("CALPERS")
