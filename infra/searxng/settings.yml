@@ -1,0 +1,11 @@
+# Minimal SearXNG settings: enable the JSON API the discoverer calls. The
+# allowlist is enforced in app/ingest/discover.py (domain filter), so engines
+# stay general here.
+use_default_settings: true
+search:
+  formats:
+    - html
+    - json
+server:
+  secret_key: "change-me-for-local-dev-only"
+  limiter: false
