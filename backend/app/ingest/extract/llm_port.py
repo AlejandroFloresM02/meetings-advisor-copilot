@@ -89,6 +89,7 @@ class OllamaLlmExtractor:
         base_url: str | None = None,
         client=None,
         timeout: float = 180.0,
+        temperature: float = 0.0,
     ) -> None:
         import os
 
@@ -98,6 +99,7 @@ class OllamaLlmExtractor:
         ).rstrip("/")
         self._client = client
         self.timeout = timeout
+        self.temperature = temperature
 
     def _http(self):
         if self._client is not None:
@@ -121,6 +123,7 @@ class OllamaLlmExtractor:
                 ],
                 "stream": False,
                 "format": "json",
+                "options": {"temperature": self.temperature},
             },
         )
         resp.raise_for_status()

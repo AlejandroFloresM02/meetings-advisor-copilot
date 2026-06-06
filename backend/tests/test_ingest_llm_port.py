@@ -60,4 +60,5 @@ def test_ollama_extractor_posts_chat_and_parses_json():
     assert seen["body"]["model"] == "qwen2.5:14b"
     assert seen["body"]["format"] == "json"
     assert seen["body"]["stream"] is False
+    assert seen["body"]["options"]["temperature"] == 0  # deterministic extraction
     assert [m["role"] for m in seen["body"]["messages"]] == ["system", "user"]
