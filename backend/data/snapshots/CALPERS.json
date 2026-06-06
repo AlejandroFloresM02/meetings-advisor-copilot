@@ -1,0 +1,68 @@
+{
+  "client_id": "CALPERS",
+  "captured_at": "2026-06-01",
+  "institution": {
+    "id": "CALPERS", "name": "CalPERS", "type": "public_pension",
+    "plan_assets_mm": 502000.0, "fiscal_year": 2025,
+    "funded_ratio": 0.75, "assumed_return": 0.068,
+    "allocation": [
+      {"asset_class": "Global Equity", "target_pct": 42.0, "actual_pct": 44.0},
+      {"asset_class": "Fixed Income", "target_pct": 30.0, "actual_pct": 28.0},
+      {"asset_class": "Private Equity", "target_pct": 13.0, "actual_pct": 15.0},
+      {"asset_class": "Private Credit", "target_pct": 4.0, "actual_pct": 1.5}
+    ],
+    "policy_benchmark": "CalPERS Policy Benchmark",
+    "provenance": {"kind": "public", "url": "https://www.calpers.ca.gov", "fetched_at": "2026-06-01"}
+  },
+  "seats": [
+    {"id": "SEAT-CIO", "title": "Chief Investment Officer", "remit": "Total fund",
+     "committee": "Investment Committee", "decides": "Manager retention & allocation",
+     "priorities": ["cost-efficiency", "total-fund risk"],
+     "provenance": {"kind": "public", "url": "https://www.calpers.ca.gov/about/board", "fetched_at": "2026-06-01"}},
+    {"id": "SEAT-FI", "title": "Head of Fixed Income", "remit": "Fixed income mandates",
+     "committee": "Investment Committee", "decides": "Fixed income manager relationships",
+     "priorities": ["downside protection", "fee value"],
+     "provenance": {"kind": "public", "url": "https://www.calpers.ca.gov/about/board", "fetched_at": "2026-06-01"}}
+  ],
+  "people": [
+    {"id": "P-1", "name": "Jordan Avery", "seat_id": "SEAT-CIO",
+     "background": "Two decades in public-fund total-portfolio management.",
+     "provenance": {"kind": "synthetic"}},
+    {"id": "P-2", "name": "Morgan Reyes", "seat_id": "SEAT-FI",
+     "background": "Fixed-income allocator focused on core-plus mandates.",
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "actions": [
+    {"id": "ACT-1", "date": "2026-05-12", "kind": "watch", "manager": "A small-cap equity manager",
+     "asset_class": "Global Equity", "detail": "Placed on watch after 3 quarters of underperformance.",
+     "provenance": {"kind": "public", "url": "https://www.pionline.com", "fetched_at": "2026-06-01"}},
+    {"id": "ACT-2", "date": "2026-05-20", "kind": "search", "manager": null,
+     "asset_class": "Private Credit", "detail": "Notice of search to fund the private-credit target.",
+     "provenance": {"kind": "public", "url": "https://www.calpers.ca.gov", "fetched_at": "2026-06-01"}}
+  ],
+  "mandates": [
+    {"id": "CGM-1", "strategy": "Core Plus Income", "vehicle": "Separate Account",
+     "size_mm": 600.5, "fee_bps": 38.0, "inception": "2019-03-01",
+     "net_excess_bps": 62.0, "information_ratio": 0.71, "down_capture": 0.83,
+     "benchmark": "Bloomberg US Aggregate", "provenance": {"kind": "synthetic"}}
+  ],
+  "pipeline": [
+    {"id": "OPP-1", "strategy": "Private Credit", "size_mm": 250.0, "stage": "Qualification",
+     "probability": 0.4, "expected_close": "2026-09-30", "owner": "Diane Okafor",
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "relationship": {"rm": "Diane Okafor", "tier": "Strategic", "consultant": "Mercer",
+                   "status": "Active", "client_since": 2009, "provenance": {"kind": "synthetic"}},
+  "interactions": [
+    {"id": "INT-1", "date": "2026-04-22", "kind": "Portfolio Review",
+     "summary": "Reviewed Core Plus performance; discussed fee schedule.",
+     "open_action_items": ["Send the SMA breakpoint schedule to Mercer"],
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "meetings": [
+    {"id": "MTG-1", "date": "2026-06-05", "purpose": "Quarterly portfolio review",
+     "objective": "Defend the Core Plus mandate amid the cost review",
+     "scenario": "portfolio_review", "seat_ids": ["SEAT-CIO", "SEAT-FI"],
+     "provenance": {"kind": "synthetic"}}
+  ]
+}
