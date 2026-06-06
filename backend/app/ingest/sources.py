@@ -48,11 +48,22 @@ def sources_for(client_id: str) -> list[SourceDescriptor]:
             query="CalPERS Annual Comprehensive Financial Report funded ratio",
             domains=_FUND_DOMAINS,
         ),
+        # Two real roster sub-pages (the /about/board hub is link-only and has no
+        # seats — it makes the LLM confabulate; the groundedness guard + these
+        # URLs were validated by the first live run). Both feed the `board`
+        # extractor; the pipeline fans their seats together.
         SourceDescriptor(
             client_id=client_id,
             fact_group="seats",
             extractor="board",
-            url="https://www.calpers.ca.gov/page/about/board",
+            url="https://www.calpers.ca.gov/about/board/board-members",
+            domains=_FUND_DOMAINS,
+        ),
+        SourceDescriptor(
+            client_id=client_id,
+            fact_group="seats",
+            extractor="board",
+            url="https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team",
             domains=_FUND_DOMAINS,
         ),
         SourceDescriptor(
