@@ -1,26 +1,3 @@
-import pytest
-
-from app.config import CRM_XLSX_PATH, MEETINGS_DIR
-from app.data.repository import load_repository
-
-
-class StubLLM:
-    """Deterministic fake LLMClient. Set `.payload` to the dict to return."""
-
-    def __init__(self, payload=None):
-        self.payload = payload or {}
-        self.calls = []
-
-    def generate_json(self, system: str, user: str) -> dict:
-        self.calls.append((system, user))
-        return self.payload
-
-
-@pytest.fixture
-def repo():
-    return load_repository(CRM_XLSX_PATH, MEETINGS_DIR)
-
-
-@pytest.fixture
-def stub_llm():
-    return StubLLM()
+# V2 fixtures (repo / calpers) are added in Task 3 once config + repository exist.
+# Kept intentionally empty during the Task 0 scaffold so pytest collects cleanly
+# with no imports into the removed V1 layers.
