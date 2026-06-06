@@ -20,3 +20,6 @@ def _now() -> date:
 
 
 NOW: date = _now()
+
+# LLM (ingestion extraction live path only; see app/llm). Default is a free model.
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "poolside/laguna-m.1:free")

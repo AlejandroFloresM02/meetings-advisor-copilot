@@ -2,3 +2,8 @@
 pydantic>=2
 python-dotenv==1.2.2
 pytest
+
+# A2 ingestion core (pure fetch/parse, no LLM).
+httpx==0.28.1
+pypdf==5.1.0
+selectolax==0.3.27

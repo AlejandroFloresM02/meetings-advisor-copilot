@@ -1,0 +1,36 @@
+{
+  "client_id": "CALPERS",
+  "people": [
+    {"id": "P-1", "name": "Jordan Avery", "seat_id": "SEAT-CIO",
+     "background": "Two decades in public-fund total-portfolio management.",
+     "provenance": {"kind": "synthetic"}},
+    {"id": "P-2", "name": "Morgan Reyes", "seat_id": "SEAT-FI",
+     "background": "Fixed-income allocator focused on core-plus mandates.",
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "mandates": [
+    {"id": "CGM-1", "strategy": "Core Plus Income", "vehicle": "Separate Account",
+     "size_mm": 600.5, "fee_bps": 38.0, "inception": "2019-03-01",
+     "net_excess_bps": 62.0, "information_ratio": 0.71, "down_capture": 0.83,
+     "benchmark": "Bloomberg US Aggregate", "provenance": {"kind": "synthetic"}}
+  ],
+  "pipeline": [
+    {"id": "OPP-1", "strategy": "Private Credit", "size_mm": 250.0, "stage": "Qualification",
+     "probability": 0.4, "expected_close": "2026-09-30", "owner": "Diane Okafor",
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "relationship": {"rm": "Diane Okafor", "tier": "Strategic", "consultant": "Mercer",
+                   "status": "Active", "client_since": 2009, "provenance": {"kind": "synthetic"}},
+  "interactions": [
+    {"id": "INT-1", "date": "2026-04-22", "kind": "Portfolio Review",
+     "summary": "Reviewed Core Plus performance; discussed fee schedule.",
+     "open_action_items": ["Send the SMA breakpoint schedule to Mercer"],
+     "provenance": {"kind": "synthetic"}}
+  ],
+  "meetings": [
+    {"id": "MTG-1", "date": "2026-06-05", "purpose": "Quarterly portfolio review",
+     "objective": "Defend the Core Plus mandate amid the cost review",
+     "scenario": "portfolio_review", "seat_ids": ["SEAT-CIO", "SEAT-FI"],
+     "provenance": {"kind": "synthetic"}}
+  ]
+}

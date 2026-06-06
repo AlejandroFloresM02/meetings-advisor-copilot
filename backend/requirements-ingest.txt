@@ -1,0 +1,5 @@
+# Live ingestion extras — needed ONLY to record fixtures / run `python -m app.ingest --refresh-fixtures`.
+# The offline test suite never imports these (it uses replay/stub adapters).
+-r requirements.txt
+langchain==1.3.4
+langchain-openrouter==0.2.3
