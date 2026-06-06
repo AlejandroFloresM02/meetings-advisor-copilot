@@ -49,3 +49,26 @@ def test_board_extract_builds_seats_with_provenance():
 def test_html_to_text_strips_scripts():
     assert "ignore me" not in board.html_to_text(_BOARD_HTML)
     assert "Chief Investment Officer" in board.html_to_text(_BOARD_HTML)
+
+
+def test_board_extract_drops_ungrounded_seats():
+    # groundedness guard: a seat whose title is absent from the page text is a
+    # confabulation and must be dropped (this is the hub-page failure mode).
+    html = "<html><body><h3>Board Committees</h3><p>The board has six committees.</p></body></html>"
+    doc = FetchedDoc.from_text(
+        "https://www.calpers.ca.gov/about/board", date(2026, 6, 1), "text/html", html
+    )
+
+    class _Hallucinating:
+        def extract(self, system, user):
+            return {
+                "seats": [
+                    {
+                        "id": "SEAT-CEO",
+                        "title": "Chief Executive Officer",
+                        "priorities": [],
+                    }
+                ]
+            }
+
+    assert board.extract(doc, _Hallucinating()) == []

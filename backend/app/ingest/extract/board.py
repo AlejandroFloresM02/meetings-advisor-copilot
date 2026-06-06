@@ -12,7 +12,9 @@ _SYSTEM = (
     "You extract governance seats (committee roles) of a US public pension from "
     "its board/staff page text. Return JSON {seats: [{id, title, remit, committee, "
     "decides, priorities: [str]}]}. id is an uppercase slug like SEAT-CIO. "
-    "Only include seats clearly named in the text; do not invent people."
+    "Only include seats whose title appears verbatim in the text, and copy the "
+    'title exactly as written. If the page names no seats, return {"seats": []}. '
+    "Never infer roles from navigation menus or from general knowledge."
 )
 
 
@@ -26,13 +28,23 @@ def html_to_text(html: str) -> str:
     return " ".join(body.text(separator=" ", strip=True).split()) if body else ""
 
 
+def _norm(text: str) -> str:
+    """Whitespace-collapsed, lowercased text for substring grounding checks."""
+    return " ".join(str(text).split()).lower()
+
+
 def extract(doc: FetchedDoc, llm: LlmExtractor) -> list[GovernanceSeat]:
-    text = html_to_text(doc.text())
-    data = llm.extract(_SYSTEM, text[:12000])
+    prompt_text = html_to_text(doc.text())[:12000]
+    data = llm.extract(_SYSTEM, prompt_text)
+    haystack = _norm(prompt_text)
     prov = Provenance(kind="public", url=doc.url, fetched_at=doc.fetched_at)
     seats = []
     for s in data.get("seats") or []:
         if not isinstance(s, dict) or not s.get("title"):
+            continue
+        # groundedness guard: a title absent from the source text is a
+        # confabulation (e.g. the hub-page failure mode) -> drop it.
+        if _norm(s["title"]) not in haystack:
             continue
         seats.append(
             GovernanceSeat(
