@@ -84,8 +84,14 @@ def _seed(tmp_path):
             "text/plain",
             _ACFR,
         ),
-        "https://www.calpers.ca.gov/page/about/board": FetchedDoc.from_text(
-            "https://www.calpers.ca.gov/page/about/board",
+        "https://www.calpers.ca.gov/about/board/board-members": FetchedDoc.from_text(
+            "https://www.calpers.ca.gov/about/board/board-members",
+            date(2026, 6, 1),
+            "text/html",
+            _BOARD,
+        ),
+        "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team": FetchedDoc.from_text(
+            "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team",
             date(2026, 6, 1),
             "text/html",
             _BOARD,

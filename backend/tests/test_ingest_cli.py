@@ -22,7 +22,11 @@ class _StubFetcher:
                 "text/plain",
                 "funded ratio 75 percent",
             ),
-            "https://www.calpers.ca.gov/page/about/board": (
+            "https://www.calpers.ca.gov/about/board/board-members": (
+                "text/html",
+                "<h3>CIO</h3>",
+            ),
+            "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team": (
                 "text/html",
                 "<h3>CIO</h3>",
             ),
