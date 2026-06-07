@@ -13,7 +13,7 @@ _SCALARS = (
     ' "MktAssets_net": "440000.0"},'
     '{"ppd_id": "9", "PlanName": "California PERF", "fy": "2023",'
     ' "ActFundedRatio_GASB": "0.71313", "InvestmentReturnAssumption_GASB": "0.068",'
-    ' "MktAssets_net": "464578.144"}'
+    ' "MktAssets_net": "464578144.0"}'  # PPD reports assets in thousands
     "]"
 )
 
