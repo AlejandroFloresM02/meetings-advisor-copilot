@@ -11,28 +11,22 @@ from app.ingest.models import FetchedDoc
 DATA = Path(__file__).resolve().parents[1] / "data"
 
 
+_PPD_SCALARS = '[{"status": "OK"}, {"ppd_id": "9", "fy": "2023", "ActFundedRatio_GASB": "0.75", "InvestmentReturnAssumption_GASB": "0.068", "MktAssets_net": "464578.144"}]'
+_PPD_ALLOC = '[{"status": "OK"}, {"ppd_id": "9", "fy": "2022", "EQTotal_Actl": "0.43"}]'
+
+
 class _StubFetcher:
     def fetch(self, url):
-        bodies = {
-            "https://publicplansdata.org/public-plans-database/download-data/": (
-                "application/json",
-                '{"FundedRatio": 0.75, "TotalPlanAssets_mm": 502000.0, "FiscalYear": 2025, "Allocation": []}',
-            ),
-            "https://www.calpers.ca.gov/acfr-2025": (
-                "text/plain",
-                "funded ratio 75 percent",
-            ),
-            "https://www.calpers.ca.gov/about/board/board-members": (
-                "text/html",
-                "<h3>CIO</h3>",
-            ),
-            "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team": (
-                "text/html",
-                "<h3>CIO</h3>",
-            ),
-            "https://www.pionline.com/calpers-watch": ("text/html", "on watch"),
-        }
-        ct, body = bodies[url]
+        if "QVariables" in url:
+            ct, body = "application/json", _PPD_SCALARS
+        elif "QDataSet" in url:
+            ct, body = "application/json", _PPD_ALLOC
+        elif "acfr" in url:
+            ct, body = "text/plain", "funded ratio 75 percent"
+        elif "board-members" in url or "senior-team" in url:
+            ct, body = "text/html", "<h3>CIO</h3>"
+        else:
+            ct, body = "text/html", "on watch"
         return FetchedDoc.from_text(url, date(2026, 6, 1), ct, body)
 
 

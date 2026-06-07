@@ -25,6 +25,22 @@ _PPD_DOMAINS = ["publicplansdata.org"]
 _FUND_DOMAINS = ["calpers.ca.gov"]
 _NEWS_DOMAINS = ["pionline.com", "ai-cio.com", "calpers.ca.gov"]
 
+# PPD REST API (publicplansdata.org/api/) — CalPERS is ppd_id 9 ("California
+# PERF"). Two deterministic calls: QVariables for scalars, QDataSet for actual
+# allocation. The fy range is wide; the extractor selects the latest populated
+# year. (The old /download-data/ slug 404s — confirmed in the first live run.)
+_PPD_SCALARS_URL = (
+    "https://publicplansdata.org/api/?q=QVariables"
+    "&variables=ppd_id,PlanName,fy,ActFundedRatio_GASB,"
+    "InvestmentReturnAssumption_GASB,ActAssets_GASB,MktAssets_net"
+    "&filterppdid=9&filterfystart=2018&filterfyend=2025&format=json"
+)
+_PPD_ALLOCATION_URL = (
+    "https://publicplansdata.org/api/?q=QDataSet"
+    "&dataset=pensioninvestmentperformance"
+    "&filterppdid=9&filterfystart=2018&filterfyend=2025&format=json"
+)
+
 
 def client_identity(client_id: str) -> dict:
     return dict(_IDENTITY[client_id])
@@ -38,7 +54,14 @@ def sources_for(client_id: str) -> list[SourceDescriptor]:
             client_id=client_id,
             fact_group="institution",
             extractor="publicplans",
-            url="https://publicplansdata.org/public-plans-database/download-data/",
+            url=_PPD_SCALARS_URL,
+            domains=_PPD_DOMAINS,
+        ),
+        SourceDescriptor(
+            client_id=client_id,
+            fact_group="institution",
+            extractor="publicplans",
+            url=_PPD_ALLOCATION_URL,
             domains=_PPD_DOMAINS,
         ),
         SourceDescriptor(

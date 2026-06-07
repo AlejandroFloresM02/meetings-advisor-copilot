@@ -9,18 +9,30 @@ from app.ingest.pipeline import ingest_client
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 
-_PPD = '{"FundedRatio": 0.75, "ActuarialAssumedInterest": 0.068, "TotalPlanAssets_mm": 502000.0, "FiscalYear": 2025, "Allocation": [{"asset_class": "Fixed Income", "target_pct": 30.0, "actual_pct": 28.0}]}'
+_PPD_SCALARS = '[{"status": "OK"}, {"ppd_id": "9", "fy": "2023", "ActFundedRatio_GASB": "0.75", "InvestmentReturnAssumption_GASB": "0.068", "MktAssets_net": "464578.144"}]'
+_PPD_ALLOC = '[{"status": "OK"}, {"ppd_id": "9", "fy": "2022", "EQTotal_Actl": "0.43", "FITotal_Actl": "0.25"}]'
 _BOARD = "<html><body><h3>Chief Investment Officer</h3></body></html>"
 _NEWS = "<html><body>CalPERS placed a manager on watch.</body></html>"
 _ACFR = "CalPERS ACFR FY2025 funded ratio 75 percent."
 
 
+def _doc(url, ct, body):
+    return FetchedDoc.from_text(url, date(2026, 6, 1), ct, body)
+
+
 class _StubFetcher:
-    def __init__(self, docs):
-        self.docs = docs
+    """Canned content keyed by URL shape (decoupled from exact source URLs)."""
 
     def fetch(self, url):
-        return self.docs[url]
+        if "QVariables" in url:
+            return _doc(url, "application/json", _PPD_SCALARS)
+        if "QDataSet" in url:
+            return _doc(url, "application/json", _PPD_ALLOC)
+        if "acfr" in url:
+            return _doc(url, "text/plain", _ACFR)
+        if "board-members" in url or "senior-team" in url:
+            return _doc(url, "text/html", _BOARD)
+        return _doc(url, "text/html", _NEWS)
 
 
 class _RouterLlm:
@@ -71,39 +83,7 @@ class _StubDiscoverer:
 
 
 def _seed(tmp_path):
-    urls = {
-        "https://publicplansdata.org/public-plans-database/download-data/": FetchedDoc.from_text(
-            "https://publicplansdata.org/public-plans-database/download-data/",
-            date(2026, 6, 1),
-            "application/json",
-            _PPD,
-        ),
-        "https://www.calpers.ca.gov/acfr-2025": FetchedDoc.from_text(
-            "https://www.calpers.ca.gov/acfr-2025",
-            date(2026, 6, 1),
-            "text/plain",
-            _ACFR,
-        ),
-        "https://www.calpers.ca.gov/about/board/board-members": FetchedDoc.from_text(
-            "https://www.calpers.ca.gov/about/board/board-members",
-            date(2026, 6, 1),
-            "text/html",
-            _BOARD,
-        ),
-        "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team": FetchedDoc.from_text(
-            "https://www.calpers.ca.gov/investments/about-investment-office/investment-office-senior-team",
-            date(2026, 6, 1),
-            "text/html",
-            _BOARD,
-        ),
-        "https://www.pionline.com/calpers-watch": FetchedDoc.from_text(
-            "https://www.pionline.com/calpers-watch",
-            date(2026, 6, 1),
-            "text/html",
-            _NEWS,
-        ),
-    }
-    fetcher = RecordingFetcher(_StubFetcher(urls), tmp_path)
+    fetcher = RecordingFetcher(_StubFetcher(), tmp_path)
     disc = RecordingDiscoverer(_StubDiscoverer(), tmp_path)
     llm = RecordingLlmExtractor(_RouterLlm(), tmp_path)
     ingest_client(
